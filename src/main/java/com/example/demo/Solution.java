@@ -116,5 +116,15 @@ public class Solution {
     }
 
     // 1287. Element Appearing More Than 25% In Sorted Array
-    
+    public int findSpecialInteger(int[] arr) {
+        int len = arr.length;
+        int range = len/4;
+        for(int i = 0; i + range < len; i++){
+            int right = i + range;
+            if(arr[i] == arr[right]){
+                return arr[i];
+            }
+        }
+        return -1;
+    }
 }
