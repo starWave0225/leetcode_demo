@@ -1,12 +1,17 @@
 package com.example.demo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 import java.util.logging.Logger;
 
 public class Solution {
     Logger logger = Logger.getLogger(getClass().getName());
+    int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 
     public void log(String sth) {
         logger.info(sth);
@@ -106,7 +111,7 @@ public class Solution {
     }
 
     public TreeNode addOneRow(TreeNode root, int val, int depth) {
-        if(depth == 1){
+        if (depth == 1) {
             TreeNode node = new TreeNode(val);
             node.left = root;
             return node;
@@ -118,13 +123,232 @@ public class Solution {
     // 1287. Element Appearing More Than 25% In Sorted Array
     public int findSpecialInteger(int[] arr) {
         int len = arr.length;
-        int range = len/4;
-        for(int i = 0; i + range < len; i++){
+        int range = len / 4;
+        for (int i = 0; i + range < len; i++) {
             int right = i + range;
-            if(arr[i] == arr[right]){
+            if (arr[i] == arr[right]) {
                 return arr[i];
             }
         }
         return -1;
+    }
+
+    // 988. Smallest String Starting From Leaf
+    public void smallestFromLeafDfs(TreeNode node, StringBuilder res, StringBuilder path) {
+        if (node == null)
+            return;
+        char temp = (char) ('a' + node.val);
+        path.insert(0, temp);
+        if (node.left == null && node.right == null) {
+            String cur = path.toString();
+            if (res.length() == 0 || cur.compareTo(res.toString()) < 0) {
+                res.setLength(0);
+                res.append(cur);
+            }
+        }
+        smallestFromLeafDfs(node.left, res, path);
+        smallestFromLeafDfs(node.right, res, path);
+        path.deleteCharAt(0);
+    }
+
+    public String smallestFromLeaf(TreeNode root) {
+        StringBuilder res = new StringBuilder();
+        StringBuilder path = new StringBuilder();
+        smallestFromLeafDfs(root, res, path);
+        return res.toString();
+    }
+
+    // 992. Subarrays with K Different Integers
+    public int subarraysWithKDistinct(int[] nums, int k) {
+        int resMaxK = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int l = 0;
+        int r = 0;
+        while (r < nums.length) {
+            int cur = nums[r];
+            map.put(cur, map.getOrDefault(cur, 0) + 1);
+            while (map.keySet().size() > k) {
+                int temp = nums[l];
+                l++;
+                map.put(temp, map.get(temp) - 1);
+                if (map.get(temp) == 0) {
+                    map.remove(temp);
+                }
+            }
+            resMaxK += r - l + 1;
+            r++;
+        }
+        int resMaxKs1 = 0;
+        map = new HashMap<>();
+        l = 0;
+        r = 0;
+        while (r < nums.length) {
+            int cur = nums[r];
+            map.put(cur, map.getOrDefault(cur, 0) + 1);
+            while (map.keySet().size() >= k) {
+                int temp = nums[l];
+                l++;
+                map.put(temp, map.get(temp) - 1);
+                if (map.get(temp) == 0) {
+                    map.remove(temp);
+                }
+            }
+            resMaxKs1 += r - l + 1;
+            r++;
+        }
+        return resMaxK - resMaxKs1;
+    }
+
+    // 200. Number of Islands
+    public void numIslandsDfs(char[][] grid, int x, int y) {
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
+            return;
+        }
+        if (grid[x][y] == '1') {
+            grid[x][y] = '0';
+            numIslandsDfs(grid, x - 1, y);
+            numIslandsDfs(grid, x + 1, y);
+            numIslandsDfs(grid, x, y - 1);
+            numIslandsDfs(grid, x, y + 1);
+        }
+    }
+
+    public int numIslands(char[][] grid) {
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    res++;
+                    numIslandsDfs(grid, i, j);
+                }
+            }
+        }
+        return res;
+    }
+
+    // 872. Leaf-Similar Trees
+    public boolean isLeaf(TreeNode node) {
+        return node.left == null && node.right == null;
+    }
+
+    public void leafSimilarDfs(TreeNode node, List<Integer> list) {
+        if (node == null) {
+            return;
+        }
+        if (isLeaf(node)) {
+            list.add(node.val);
+        }
+        leafSimilarDfs(node.left, list);
+        leafSimilarDfs(node.right, list);
+    }
+
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        List<Integer> leaf1 = new ArrayList<>();
+        List<Integer> leaf2 = new ArrayList<>();
+        leafSimilarDfs(root1, leaf1);
+        leafSimilarDfs(root2, leaf2);
+        return leaf1.equals(leaf2);
+    }
+
+    // 463. Island Perimeter
+    public int islandPerimeter(int[][] grid) {
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 0) {
+                    continue;
+                }
+                if (i == 0 || grid[i - 1][j] == 0) {
+                    res++;
+                }
+                if (i == grid.length - 1 || grid[i + 1][j] == 0) {
+                    res++;
+                }
+                if (j == 0 || grid[i][j - 1] == 0) {
+                    res++;
+                }
+                if (j == grid[0].length - 1 || grid[i][j + 1] == 0) {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    // 1992. Find All Groups of Farmland
+    private int[] findFarmlandDfs(int[][] land, Set<Integer> set, int i, int j) {
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[] { i, j });
+        set.add(i * 1000 + j);
+        int minX = i, minY = j, maxX = i, maxY = j;
+        while (!stack.isEmpty()) {
+            int[] current = stack.pop();
+            int cx = current[0], cy = current[1];
+            for (int[] dir : directions) {
+                int nx = cx + dir[0], ny = cy + dir[1];
+                if (nx >= 0 && nx < land.length && ny >= 0 && ny < land[0].length
+                        && land[nx][ny] == 1 && !set.contains(nx * 1000 + ny)) {
+                    set.add(nx * 1000 + ny);
+                    stack.push(new int[] { nx, ny });
+                    minX = Math.min(minX, nx);
+                    minY = Math.min(minY, ny);
+                    maxX = Math.max(maxX, nx);
+                    maxY = Math.max(maxY, ny);
+                }
+            }
+        }
+        return new int[] { minX, minY, maxX, maxY };
+    }
+
+    public int[][] findFarmland(int[][] land) {
+        int rows = land.length;
+        int cols = land[0].length;
+        Set<Integer> visited = new HashSet<>();
+        List<int[]> result = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int temp = i * 1000 + j;
+                if (land[i][j] == 1 && !visited.contains(temp)) {
+                    int[] bounds = findFarmlandDfs(land, visited, i, j);
+                    result.add(bounds);
+                }
+            }
+        }
+        return result.toArray(new int[result.size()][]);
+    }
+
+    // 131. Palindrome Partitioning
+    public boolean isPalindrome(String s){
+        int left = 0, right = s.length() - 1;
+        while(left < right){
+            if(s.charAt(left) == s.charAt(right)){
+                left++;right--;
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void partitionFindPalindrome(String s, int left, List<List<String>> res, List<String> curList){
+        if (left >= s.length()) {
+            res.add(new ArrayList<>(curList));
+            return;
+        }
+        for(int i= left; i < s.length(); i++){
+            String cur  = s.substring(left, i+1);
+            if(isPalindrome(cur)){
+                curList.add(cur);
+                partitionFindPalindrome(s, i+1, res, curList);
+                curList.remove(curList.size()-1);
+            }
+        }
+    }
+    
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        partitionFindPalindrome(s, 0, res, new ArrayList<>());
+        return res;
     }
 }
