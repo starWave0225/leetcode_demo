@@ -3,8 +3,10 @@ package com.example.demo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
@@ -373,21 +375,67 @@ public class Solution {
         int n = chalk.length;
         int[] newChalk = new int[n];
         newChalk[0] = chalk[0];
-        for(int i = 0; i < n-1; i++){
+        for (int i = 0; i < n - 1; i++) {
             if (newChalk[i] > k) {
                 return i;
             }
-            newChalk[i+1] = chalk[i+1] + newChalk[i];
+            newChalk[i + 1] = chalk[i + 1] + newChalk[i];
         }
-        if(newChalk[n-1] > k){
-            return n-1;
+        if (newChalk[n - 1] > k) {
+            return n - 1;
         }
-        k %= newChalk[n-1];
-        for(int i = 0; i < n; i++){
+        k %= newChalk[n - 1];
+        for (int i = 0; i < n; i++) {
             if (newChalk[i] > k) {
                 return i;
             }
         }
         return 0;
+    }
+
+    // 1391. Check if There is a Valid Path in a Grid
+    public boolean hasValidPath(int[][] grid) {
+        int[][][] dirs = {
+            {{0, -1}, {0, 1}},
+            {{-1, 0}, {1, 0}},
+            {{0, -1}, {1, 0}},
+            {{0, 1}, {1, 0}},
+            {{0, -1}, {-1, 0}},
+            {{0, 1}, {-1, 0}}
+        };
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{0,0});
+        int m = grid.length, n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        visited[0][0] = true;
+        while (!queue.isEmpty()){
+            int[] cur = queue.poll();
+            int i = cur[0], j = cur[1];
+            for(int[] dir: dirs[grid[i][j] - 1]){
+                int newi = i + dir[0], newj = j + dir[1];
+                if(newi >= 0 && newj >= 0 && newi < m && newj < n && !visited[newi][newj]){
+                    for(int[] dir2: dirs[grid[newi][newj] - 1]){
+                        if(newi + dir2[0] == i && newj + dir2[1] == j){
+                            visited[newi][newj] = true;
+                            queue.offer(new int[]{newi, newj});
+                        }
+                    }
+                }
+            }
+        }
+        return visited[m-1][n-1];
+    }
+
+    // 26. Remove Duplicates from Sorted Array
+    public int removeDuplicates(int[] nums) {
+        int k = 0;
+        for(int i = 0; i < nums.length; i++){
+            while(i != nums.length - 1 && nums[i+1] == nums[i]){
+                i++;
+            }
+            nums[k] = nums[i];
+            k++;
+        }
+        return k;
     }
 }
