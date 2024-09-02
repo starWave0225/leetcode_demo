@@ -318,37 +318,76 @@ public class Solution {
     }
 
     // 131. Palindrome Partitioning
-    public boolean isPalindrome(String s){
+    public boolean isPalindrome(String s) {
         int left = 0, right = s.length() - 1;
-        while(left < right){
-            if(s.charAt(left) == s.charAt(right)){
-                left++;right--;
-            }
-            else{
+        while (left < right) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left++;
+                right--;
+            } else {
                 return false;
             }
         }
         return true;
     }
 
-    private void partitionFindPalindrome(String s, int left, List<List<String>> res, List<String> curList){
+    private void partitionFindPalindrome(String s, int left, List<List<String>> res, List<String> curList) {
         if (left >= s.length()) {
             res.add(new ArrayList<>(curList));
             return;
         }
-        for(int i= left; i < s.length(); i++){
-            String cur  = s.substring(left, i+1);
-            if(isPalindrome(cur)){
+        for (int i = left; i < s.length(); i++) {
+            String cur = s.substring(left, i + 1);
+            if (isPalindrome(cur)) {
                 curList.add(cur);
-                partitionFindPalindrome(s, i+1, res, curList);
-                curList.remove(curList.size()-1);
+                partitionFindPalindrome(s, i + 1, res, curList);
+                curList.remove(curList.size() - 1);
             }
         }
     }
-    
+
     public List<List<String>> partition(String s) {
         List<List<String>> res = new ArrayList<>();
         partitionFindPalindrome(s, 0, res, new ArrayList<>());
         return res;
+    }
+
+    // 1404. Number of Steps to Reduce a Number in Binary Representation to One
+    public int numSteps(String s) {
+        int res = 0;
+        int carry = 0;
+        for (int i = s.length() - 1; i > 0; i--) {
+            char ch = s.charAt(i);
+            if (ch - '0' + carry == 1) {
+                carry = 1;
+                res += 2;
+            } else {
+                res += 2;
+            }
+        }
+        return res + carry;
+    }
+
+    // 1894. Find the Student that Will Replace the Chalk
+    public int chalkReplacer(int[] chalk, int k) {
+        int n = chalk.length;
+        int[] newChalk = new int[n];
+        newChalk[0] = chalk[0];
+        for(int i = 0; i < n-1; i++){
+            if (newChalk[i] > k) {
+                return i;
+            }
+            newChalk[i+1] = chalk[i+1] + newChalk[i];
+        }
+        if(newChalk[n-1] > k){
+            return n-1;
+        }
+        k %= newChalk[n-1];
+        for(int i = 0; i < n; i++){
+            if (newChalk[i] > k) {
+                return i;
+            }
+        }
+        return 0;
     }
 }
