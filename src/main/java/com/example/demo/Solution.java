@@ -489,4 +489,39 @@ public class Solution {
         }
         return (int)(res);
     }
+
+    // 2708. Maximum Strength of a Group
+    public long maxStrength(int[] nums) {
+        if(nums.length == 1){
+            return nums[0];
+        }
+        long res = 1;
+        boolean flag = false;
+        int minus = 0;
+        int notZero = 0;
+        int min = -10;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] != 0){
+                flag = true;
+                res *= nums[i];
+                notZero++;
+            }
+            if(nums[i] < 0){
+                minus++;
+                if(min < nums[i]){
+                    min = nums[i];
+                }
+            }
+        }
+        if(!flag){
+            return 0;
+        }
+        if((minus & 1) == 1){
+            if(minus == 1 && notZero == 1){
+                return 0;
+            }
+            res /= min;
+        }
+        return res;
+    }
 }
