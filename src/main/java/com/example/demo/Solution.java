@@ -438,4 +438,55 @@ public class Solution {
         }
         return k;
     }
+
+    // 1945. Sum of Digits of String After Convert
+    public int getLucky(String s, int k) {
+        int res = 0;
+        for(char ch : s.toCharArray()){
+            int temp = ch-'a'+1;
+            if(temp >= 10){
+                res += temp/10;
+                res += temp%10;
+            }
+            else{
+                res += temp;
+            }
+        }
+        while(k != 1){
+            k--;
+            int tempRes = res;
+            res = 0;
+            while(tempRes != 0){
+                res += tempRes %10;
+                tempRes /= 10;
+            }
+        }
+        return res;
+    }
+
+    //2750. Ways to Split Array Into Good Subarrays
+    public int numberOfGoodSubarraySplits(int[] nums) {
+        int n = nums.length;
+        long res = 1;
+        int zero = 0, one = 0;
+        int i = 0;
+        while(i < n){
+            if(nums[i] == 0){
+                zero++;
+            }
+            else{
+                one++;
+                if(one > 1 && zero >= 1){
+                    res *= zero+1;
+                    res %= 1e9+7;
+                }
+                zero = 0;
+            }
+            i++;
+        }
+        if(one == 0){
+            return 0;
+        }
+        return (int)(res);
+    }
 }
