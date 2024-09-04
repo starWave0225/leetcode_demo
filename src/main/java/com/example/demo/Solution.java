@@ -556,4 +556,27 @@ public class Solution {
         }
         return res;
     }
+
+    // 633. Sum of Square Numbers
+    public boolean judgeSquareSum(int c) {
+        if(c == 0)
+            return true;
+        int i = 0, j = (int) Math.sqrt(c);
+        if (c / j == j && c % j == 0) {
+            return true;
+        }
+        while (i <= j) {
+            long tempI = i * i;
+            long tempJ = j * j;
+            long temp = tempI + tempJ;
+            if (temp == c) {
+                return true;
+            } else if (temp < c) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+        return false;
+    }
 }
