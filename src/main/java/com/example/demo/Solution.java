@@ -396,41 +396,41 @@ public class Solution {
     // 1391. Check if There is a Valid Path in a Grid
     public boolean hasValidPath(int[][] grid) {
         int[][][] dirs = {
-            {{0, -1}, {0, 1}},
-            {{-1, 0}, {1, 0}},
-            {{0, -1}, {1, 0}},
-            {{0, 1}, {1, 0}},
-            {{0, -1}, {-1, 0}},
-            {{0, 1}, {-1, 0}}
+                { { 0, -1 }, { 0, 1 } },
+                { { -1, 0 }, { 1, 0 } },
+                { { 0, -1 }, { 1, 0 } },
+                { { 0, 1 }, { 1, 0 } },
+                { { 0, -1 }, { -1, 0 } },
+                { { 0, 1 }, { -1, 0 } }
         };
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{0,0});
+        queue.offer(new int[] { 0, 0 });
         int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
         visited[0][0] = true;
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int[] cur = queue.poll();
             int i = cur[0], j = cur[1];
-            for(int[] dir: dirs[grid[i][j] - 1]){
+            for (int[] dir : dirs[grid[i][j] - 1]) {
                 int newi = i + dir[0], newj = j + dir[1];
-                if(newi >= 0 && newj >= 0 && newi < m && newj < n && !visited[newi][newj]){
-                    for(int[] dir2: dirs[grid[newi][newj] - 1]){
-                        if(newi + dir2[0] == i && newj + dir2[1] == j){
+                if (newi >= 0 && newj >= 0 && newi < m && newj < n && !visited[newi][newj]) {
+                    for (int[] dir2 : dirs[grid[newi][newj] - 1]) {
+                        if (newi + dir2[0] == i && newj + dir2[1] == j) {
                             visited[newi][newj] = true;
-                            queue.offer(new int[]{newi, newj});
+                            queue.offer(new int[] { newi, newj });
                         }
                     }
                 }
             }
         }
-        return visited[m-1][n-1];
+        return visited[m - 1][n - 1];
     }
 
     // 26. Remove Duplicates from Sorted Array
     public int removeDuplicates(int[] nums) {
         int k = 0;
-        for(int i = 0; i < nums.length; i++){
-            while(i != nums.length - 1 && nums[i+1] == nums[i]){
+        for (int i = 0; i < nums.length; i++) {
+            while (i != nums.length - 1 && nums[i + 1] == nums[i]) {
                 i++;
             }
             nums[k] = nums[i];
@@ -442,57 +442,55 @@ public class Solution {
     // 1945. Sum of Digits of String After Convert
     public int getLucky(String s, int k) {
         int res = 0;
-        for(char ch : s.toCharArray()){
-            int temp = ch-'a'+1;
-            if(temp >= 10){
-                res += temp/10;
-                res += temp%10;
-            }
-            else{
+        for (char ch : s.toCharArray()) {
+            int temp = ch - 'a' + 1;
+            if (temp >= 10) {
+                res += temp / 10;
+                res += temp % 10;
+            } else {
                 res += temp;
             }
         }
-        while(k != 1){
+        while (k != 1) {
             k--;
             int tempRes = res;
             res = 0;
-            while(tempRes != 0){
-                res += tempRes %10;
+            while (tempRes != 0) {
+                res += tempRes % 10;
                 tempRes /= 10;
             }
         }
         return res;
     }
 
-    //2750. Ways to Split Array Into Good Subarrays
+    // 2750. Ways to Split Array Into Good Subarrays
     public int numberOfGoodSubarraySplits(int[] nums) {
         int n = nums.length;
         long res = 1;
         int zero = 0, one = 0;
         int i = 0;
-        while(i < n){
-            if(nums[i] == 0){
+        while (i < n) {
+            if (nums[i] == 0) {
                 zero++;
-            }
-            else{
+            } else {
                 one++;
-                if(one > 1 && zero >= 1){
-                    res *= zero+1;
-                    res %= 1e9+7;
+                if (one > 1 && zero >= 1) {
+                    res *= zero + 1;
+                    res %= 1e9 + 7;
                 }
                 zero = 0;
             }
             i++;
         }
-        if(one == 0){
+        if (one == 0) {
             return 0;
         }
-        return (int)(res);
+        return (int) (res);
     }
 
     // 2708. Maximum Strength of a Group
     public long maxStrength(int[] nums) {
-        if(nums.length == 1){
+        if (nums.length == 1) {
             return nums[0];
         }
         long res = 1;
@@ -500,27 +498,61 @@ public class Solution {
         int minus = 0;
         int notZero = 0;
         int min = -10;
-        for(int i = 0; i < nums.length; i++){
-            if(nums[i] != 0){
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
                 flag = true;
                 res *= nums[i];
                 notZero++;
             }
-            if(nums[i] < 0){
+            if (nums[i] < 0) {
                 minus++;
-                if(min < nums[i]){
+                if (min < nums[i]) {
                     min = nums[i];
                 }
             }
         }
-        if(!flag){
+        if (!flag) {
             return 0;
         }
-        if((minus & 1) == 1){
-            if(minus == 1 && notZero == 1){
+        if ((minus & 1) == 1) {
+            if (minus == 1 && notZero == 1) {
                 return 0;
             }
             res /= min;
+        }
+        return res;
+    }
+
+    // 874. Walking Robot Simulation
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        int res = 0;
+        int x = 0, y = 0, dir = 0;
+        for (int command : commands) {
+            if (command == -1) {
+                dir++;
+                dir %= 4;
+            } else if (command == -2) {
+                dir += 3;
+                dir %= 4;
+            } else {
+                for (int i = 0; i < command; i++) {
+                    int nx = x + directions[dir][0];
+                    int ny = y + directions[dir][1];
+                    boolean stuck = false;
+                    for (int j = 0; j < obstacles.length; j++) {
+                        if (nx == obstacles[j][0] && ny == obstacles[j][1]) {
+                            stuck = true;
+                            break;
+                        }
+                    }
+                    if (!stuck) {
+                        x = nx;
+                        y = ny;
+                        res = Math.max(res, nx * nx + ny * ny);
+                    }
+                }
+            }
         }
         return res;
     }
