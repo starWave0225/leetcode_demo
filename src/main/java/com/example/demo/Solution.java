@@ -559,7 +559,7 @@ public class Solution {
 
     // 633. Sum of Square Numbers
     public boolean judgeSquareSum(int c) {
-        if(c == 0)
+        if (c == 0)
             return true;
         int i = 0, j = (int) Math.sqrt(c);
         if (c / j == j && c % j == 0) {
@@ -578,5 +578,100 @@ public class Solution {
             }
         }
         return false;
+    }
+
+    // 7. Reverse Integer
+    public int reverse(int x) {
+        int res = 0;
+        while (x != 0) {
+            int temp = x % 10;
+            x /= 10;
+            if (Math.abs(x) == 0 && ((res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && temp > 7)) ||
+                    (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && temp < -8)))) {
+                return 0;
+            }
+
+            res *= 10;
+            res += temp;
+        }
+        return res;
+    }
+
+    // 2028. Find Missing Observations
+    public int[] missingRolls(int[] rolls, int mean, int n) {
+        int m = rolls.length;
+        int sum = (m + n) * mean;
+        int nSum = 0;
+        for(int i = 0; i < m; i++){
+            nSum += rolls[i];
+        }
+        int subSum = sum - nSum;
+        if(subSum >= n && subSum <= 6*n){
+            int mm = subSum / n;
+            int[] res = new int[n];
+            for(int i = 0; i < n; i++){
+                res[i] = mm;
+            }
+            int minus = subSum - mm * n;
+            if(minus == 0){
+                return res;
+            }
+            else if(minus < 0){
+                int temp = 0;
+                while(minus < -(mm-1)){
+                    res[temp] = 1;
+                    minus += mm-1;
+                    temp++;
+                }
+                res[temp] += minus;
+            }
+            else{
+                int temp = 0;
+                while(minus > 6-mm){
+                    res[temp] = 6;
+                    minus += mm-6;
+                    temp++;
+                }
+                res[temp] += minus;
+            }
+            return res;
+        }
+        else{
+            return new int[0];
+        }
+    }
+
+    // 2053. Kth Distinct String in an Array
+    public String kthDistinct(String[] arr, int k) {
+        int len = arr.length;
+        HashSet<String> set = new HashSet<>();
+        HashSet<String> dup = new HashSet<>();
+        for(int i = 0; i < len; i++){
+            if(set.contains(arr[i])){
+                dup.add(arr[i]);
+            }
+            else{
+                set.add(arr[i]);
+            }
+        }
+        for(int i = 0; i < len; i++){
+            if(!dup.contains(arr[i])){
+                k--;
+                if(k == 0){
+                    return arr[i];
+                }
+            }
+        }
+        return "";
+    }
+
+    //344. Reverse String
+    public void reverseString(char[] s) {
+        int i = 0, j = s.length-1;
+        while(i < j){
+            char ii = s[i], jj = s[j];
+            s[j] = ii; s[i] = jj;
+            i++;j--;
+        }
     }
 }
