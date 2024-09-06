@@ -674,4 +674,24 @@ public class Solution {
             i++;j--;
         }
     }
+
+    // 3217. Delete Nodes From Linked List Present in Array
+    public ListNode modifiedList(int[] nums, ListNode head) {
+        ListNode dammyHead = new ListNode();
+        HashSet set = new HashSet<>();
+        for(int num : nums){
+            set.add(num);
+        }
+        ListNode p = head;
+        ListNode resP = dammyHead;
+        while(p != null){
+            if(!set.contains(p.val)){
+                resP.next = p;
+                resP = p;
+            }
+            p = p.next;
+        }
+        resP.next = null;
+        return dammyHead.next;
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import javax.print.DocFlavor.STRING;
+
 public class Hard {
     // 1605. Find Valid Matrix Given Row and Column Sums
     public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
@@ -50,5 +52,52 @@ public class Hard {
             }
             return ans;
         }
+    }
+
+    // 564. Find the Closest Palindrome
+    public String nearestPalindromic(String n) {
+        int len = n.length();
+        long number = Long.parseLong(n);
+        if (number <= 10) {
+            return Integer.toString((int) number - 1);
+        } else if (number == 11) {
+            return "9";
+        }
+        long[] candidates = new long[5];
+        boolean odd = (len % 2 == 1);
+        String leftHalfStr = n.substring(0, (len + 1) / 2);
+        long leftHalf = Long.parseLong(leftHalfStr);
+        candidates[0] = (long) Math.pow(10, len) + 1;
+        candidates[1] = (long) Math.pow(10, len - 1) - 1;
+        candidates[2] = nearestPalindromicGenerate(leftHalf, odd);
+        candidates[3] = nearestPalindromicGenerate(leftHalf - 1, odd);
+        candidates[4] = nearestPalindromicGenerate(leftHalf + 1, odd);
+
+        long res = 0, minDiff = Long.MAX_VALUE;
+        for (long candidate : candidates) {
+            if (candidate != number) {
+                long diff = Math.abs(candidate - number);
+                if (minDiff > diff) {
+                    minDiff = diff;
+                    res = candidate;
+                } else if (minDiff == diff) {
+                    res = Math.min(res, candidate);
+                }
+            }
+        }
+
+        return Long.toString(res);
+    }
+
+    public long nearestPalindromicGenerate(long half, boolean odd) {
+        long res = half;
+        if (odd) {
+            half /= 10;
+        }
+        while (half > 0) {
+            res = res * 10 + half % 10;
+            half /= 10;
+        }
+        return res;
     }
 }
