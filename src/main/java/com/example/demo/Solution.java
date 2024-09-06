@@ -1,6 +1,9 @@
 package com.example.demo;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -403,7 +406,7 @@ public class Solution {
                 { { 0, -1 }, { -1, 0 } },
                 { { 0, 1 }, { -1, 0 } }
         };
-        Queue<int[]> queue = new LinkedList<>();
+        Queue<int[]> queue = new temp<>();
         queue.offer(new int[] { 0, 0 });
         int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
@@ -602,41 +605,38 @@ public class Solution {
         int m = rolls.length;
         int sum = (m + n) * mean;
         int nSum = 0;
-        for(int i = 0; i < m; i++){
+        for (int i = 0; i < m; i++) {
             nSum += rolls[i];
         }
         int subSum = sum - nSum;
-        if(subSum >= n && subSum <= 6*n){
+        if (subSum >= n && subSum <= 6 * n) {
             int mm = subSum / n;
             int[] res = new int[n];
-            for(int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++) {
                 res[i] = mm;
             }
             int minus = subSum - mm * n;
-            if(minus == 0){
+            if (minus == 0) {
                 return res;
-            }
-            else if(minus < 0){
+            } else if (minus < 0) {
                 int temp = 0;
-                while(minus < -(mm-1)){
+                while (minus < -(mm - 1)) {
                     res[temp] = 1;
-                    minus += mm-1;
+                    minus += mm - 1;
                     temp++;
                 }
                 res[temp] += minus;
-            }
-            else{
+            } else {
                 int temp = 0;
-                while(minus > 6-mm){
+                while (minus > 6 - mm) {
                     res[temp] = 6;
-                    minus += mm-6;
+                    minus += mm - 6;
                     temp++;
                 }
                 res[temp] += minus;
             }
             return res;
-        }
-        else{
+        } else {
             return new int[0];
         }
     }
@@ -646,18 +646,17 @@ public class Solution {
         int len = arr.length;
         HashSet<String> set = new HashSet<>();
         HashSet<String> dup = new HashSet<>();
-        for(int i = 0; i < len; i++){
-            if(set.contains(arr[i])){
+        for (int i = 0; i < len; i++) {
+            if (set.contains(arr[i])) {
                 dup.add(arr[i]);
-            }
-            else{
+            } else {
                 set.add(arr[i]);
             }
         }
-        for(int i = 0; i < len; i++){
-            if(!dup.contains(arr[i])){
+        for (int i = 0; i < len; i++) {
+            if (!dup.contains(arr[i])) {
                 k--;
-                if(k == 0){
+                if (k == 0) {
                     return arr[i];
                 }
             }
@@ -665,13 +664,15 @@ public class Solution {
         return "";
     }
 
-    //344. Reverse String
+    // 344. Reverse String
     public void reverseString(char[] s) {
-        int i = 0, j = s.length-1;
-        while(i < j){
+        int i = 0, j = s.length - 1;
+        while (i < j) {
             char ii = s[i], jj = s[j];
-            s[j] = ii; s[i] = jj;
-            i++;j--;
+            s[j] = ii;
+            s[i] = jj;
+            i++;
+            j--;
         }
     }
 
@@ -679,13 +680,13 @@ public class Solution {
     public ListNode modifiedList(int[] nums, ListNode head) {
         ListNode dammyHead = new ListNode();
         HashSet set = new HashSet<>();
-        for(int num : nums){
+        for (int num : nums) {
             set.add(num);
         }
         ListNode p = head;
         ListNode resP = dammyHead;
-        while(p != null){
-            if(!set.contains(p.val)){
+        while (p != null) {
+            if (!set.contains(p.val)) {
                 resP.next = p;
                 resP = p;
             }

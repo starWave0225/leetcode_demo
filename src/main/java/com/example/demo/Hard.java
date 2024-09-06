@@ -1,5 +1,14 @@
 package com.example.demo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+
 import javax.print.DocFlavor.STRING;
 
 public class Hard {
@@ -99,5 +108,71 @@ public class Hard {
             half /= 10;
         }
         return res;
+    }
+
+    // 2192. All Ancestors of a Node in a Directed Acyclic Graph
+    public List<List<Integer>> getAncestors(int n, int[][] edges) {
+        // Step 1: Create the adjacency list and reverse adjacency list
+        List<Set<Integer>> adjList = new ArrayList<>();
+        List<Set<Integer>> reverseAdjList = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adjList.add(new HashSet<>());
+            reverseAdjList.add(new HashSet<>());
+        }
+
+        // Populate the adjacency lists
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adjList.get(u).add(v);
+            reverseAdjList.get(v).add(u);
+        }
+
+        // Step 2: Use a topological sort
+        List<List<Integer>> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            result.add(new ArrayList<>());
+        }
+
+        // Find all nodes with no incoming edges
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] inDegreeZero = new boolean[n];
+        int[] inDegree = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            inDegree[i] = reverseAdjList.get(i).size();
+            if (inDegree[i] == 0) {
+                queue.add(i);
+                inDegreeZero[i] = true;
+            }
+        }
+
+        // Perform topological sort and accumulate ancestors
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+
+            // For each node, propagate its ancestors to its descendants
+            Set<Integer> ancestors = new HashSet<>(reverseAdjList.get(node));
+            for (int ancestor : reverseAdjList.get(node)) {
+                ancestors.addAll(result.get(ancestor));
+            }
+            result.get(node).addAll(ancestors);
+
+            // Update the queue and in-degree for nodes that are dependent on the current
+            // node
+            for (int neighbor : adjList.get(node)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        // Convert result sets to lists and sort
+        for (List<Integer> list : result) {
+            Collections.sort(list);
+        }
+
+        return result;
     }
 }
