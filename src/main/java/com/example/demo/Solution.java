@@ -357,6 +357,28 @@ public class Solution {
         return res;
     }
 
+    // 132. Palindrome Partitioning II
+    public int minCut(String s) {
+        int len = s.length();
+        int[] cuts = new int[len];
+        boolean[][] canCut = new boolean[len][len];
+        for(int i = 0; i < len; i++){
+            int minCut = i;
+            for(int j = 0; j <= i; j++){
+                if(s.charAt(i) == s.charAt(j) && (i-j<=1 || canCut[j+1][i-1])){
+                    canCut[j][i] = true;
+                    if(j == 0){
+                        minCut = 0;
+                        continue;
+                    }
+                    minCut = Math.min(minCut, cuts[j-1]+1);
+                }
+            }
+            cuts[i] = minCut;
+        }
+        return cuts[len-1];
+    }
+
     // 1404. Number of Steps to Reduce a Number in Binary Representation to One
     public int numSteps(String s) {
         int res = 0;
