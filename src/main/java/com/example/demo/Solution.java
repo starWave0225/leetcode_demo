@@ -846,4 +846,18 @@ public class Solution {
         }
         return res;
     }
+
+    // 2446. Determine if Two Events Have Conflict
+    public boolean haveConflict(String[] event1, String[] event2) {
+        int s1 = haveConflictTime(event1[0]);
+        int e1 = haveConflictTime(event1[1]);
+        int s2 = haveConflictTime(event2[0]);
+        int e2 = haveConflictTime(event2[1]);
+        return (s1 <= s2 && s2 <= e1) || (s2 <= s1 && s1 <= e2);
+    }
+
+    public int haveConflictTime(String s){
+        String num = s.substring(0,2) + s.substring(3, 5);
+        return Integer.parseInt(num);
+    }
 }
