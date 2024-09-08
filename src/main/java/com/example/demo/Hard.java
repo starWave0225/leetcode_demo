@@ -173,4 +173,35 @@ public class Hard {
 
         return result;
     }
+
+    // 1745. Palindrome Partitioning IV
+    public boolean checkPartitioning(String s) {
+        int len = s.length();
+        boolean[][] canCut = new boolean[len][len];
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (s.charAt(i) == s.charAt(j) && (i - j <= 1 || canCut[j + 1][i - 1])) {
+                    canCut[j][i] = true;
+                }
+            }
+        }
+        int i = 0, j = 1;
+        while (i < len - 2) {
+            while (i < len - 2 && !canCut[0][i]) {
+                i++;
+            }
+            j = i + 1;
+            while (j < len - 1) {
+                while (j < len - 1 && !canCut[i + 1][j]) {
+                    j++;
+                }
+                if (j < len - 1 && canCut[j + 1][len - 1]) {
+                    return true;
+                }
+                j++;
+            }
+            i++;
+        }
+        return false;
+    }
 }
