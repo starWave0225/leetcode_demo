@@ -695,4 +695,41 @@ public class Solution {
         resP.next = null;
         return dammyHead.next;
     }
+
+    // 1367. Linked List in Binary Tree
+    public boolean isSubPath(ListNode head, TreeNode root) {
+        return isSubPathDFS(head, head, root);
+    }
+
+    public boolean isSubPathDFS(ListNode head, ListNode cur, TreeNode curTree) {
+        if (cur == null) {
+            return true;
+        }
+        if (curTree == null) {
+            return false;
+        }
+        if (curTree.val == cur.val) {
+            cur = cur.next;
+        } else if (head.val == curTree.val) {
+            head = head.next;
+        } else {
+            cur = head;
+        }
+        return isSubPathDFS(head, cur, curTree.left) || isSubPathDFS(head, cur, curTree.right);
+    }
+
+    // 98. Validate Binary Search Tree
+    public boolean isValidBST(TreeNode root) {
+        return isValidBSTDFS(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    boolean isValidBSTDFS(TreeNode root, long min, long max) {
+        if (root == null)
+            return true;
+        if (root.val <= min || root.val >= max) {
+            return false;
+        } else {
+            return isValidBSTDFS(root.left, min, (long)root.val) && isValidBSTDFS(root.right, (long)root.val, max);
+        }
+    }
 }
