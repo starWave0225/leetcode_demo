@@ -729,7 +729,84 @@ public class Solution {
         if (root.val <= min || root.val >= max) {
             return false;
         } else {
-            return isValidBSTDFS(root.left, min, (long)root.val) && isValidBSTDFS(root.right, (long)root.val, max);
+            return isValidBSTDFS(root.left, min, (long) root.val) && isValidBSTDFS(root.right, (long) root.val, max);
         }
+    }
+
+    // 1325. Delete Leaves With a Given Value
+    public TreeNode removeLeafNodes(TreeNode root, int target) {
+        if (root == null) {
+            return null;
+        }
+        root.left = removeLeafNodes(root.left, target);
+        root.right = removeLeafNodes(root.right, target);
+        if (root.val == target && root.left == null && root.right == null) {
+            return null;
+        }
+        return root;
+    }
+
+    // 456. 132 Pattern
+    public boolean find132pattern(int[] nums) {
+        int len = nums.length;
+        if (len < 3)
+            return false;
+        int min = Integer.MIN_VALUE;
+        // stack记录第二大数字值的堆栈，min记录第二大数字值
+        Stack<Integer> stack = new Stack<>();
+        for (int i = len - 1; i >= 0; i--) {
+            if (nums[i] < min) {
+                return true;
+            }
+            while (!stack.isEmpty() && nums[i] > stack.peek()) {
+                min = stack.pop();
+            }
+            stack.push(nums[i]);
+        }
+        return false;
+    }
+
+    // 725. Split Linked List in Parts
+    public ListNode[] splitListToParts(ListNode head, int k) {
+        int len = 0;
+        ListNode p = head;
+        while (p != null) {
+            p = p.next;
+            len++;
+        }
+        ListNode[] res = new ListNode[k];
+        int[] resLen = new int[k];
+        int avg = len / k;
+        int diff = len - k * avg;
+        for (int i = 0; i < k; i++) {
+            if (diff > 0) {
+                resLen[i] = avg + 1;
+                diff--;
+            } else {
+                resLen[i] = avg;
+            }
+        }
+        ListNode cur = head;
+        int curI = 0;
+        int curLen = 0;
+        while (cur != null) {
+            if (resLen[curI] == 0) {
+                break;
+            }
+            if (curLen == 0) {
+                res[curI] = cur;
+            }
+            curLen++;
+            ListNode temp = cur.next;
+            if (resLen[curI] == curLen) {
+                curI++;
+                curLen = 0;
+                if (cur.next != null) {
+                    cur.next = null;
+                }
+            }
+            cur = temp;
+        }
+        return res;
     }
 }
