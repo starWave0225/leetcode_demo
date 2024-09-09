@@ -204,4 +204,37 @@ public class Hard {
         }
         return false;
     }
+
+    // 4. Median of Two Sorted Arrays
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int n1 = nums1.length, n2 = nums2.length;
+        int p1 = 0, p2 = 0;
+        int m = 0, lastM = 0;
+        while(p1+p2 <= (n1+n2)/2){
+            lastM = m;
+            if(p1 < n1 && p2 < n2){
+                if(nums1[p1] > nums2[p2]){
+                    m = nums2[p2];
+                    p2++;
+                }else{
+                    m = nums1[p1];
+                    p1++;
+                }
+            }
+            else if (p1 < n1){
+                m = nums1[p1];
+                p1++;
+            }
+            else{
+                m = nums2[p2];
+                p2++;
+            }
+        }
+        if((n1+n2) % 2 == 1){
+            return (double)m;
+        }
+        else{
+            return ((double)m+(double)lastM)/2.0;
+        }
+    }
 }

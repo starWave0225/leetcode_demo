@@ -897,4 +897,44 @@ public class Solution {
         }
         return res;
     }
+
+    // 310. Minimum Height Trees
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        if(n == 1)
+            return new ArrayList<Integer>(List.of(0));
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        for(int[] edge : edges){
+            List l0 = map.getOrDefault(edge[0], new ArrayList<Integer>());
+            l0.add(edge[1]);
+            List l1 = map.getOrDefault(edge[1], new ArrayList<Integer>());
+            l1.add(edge[0]);
+            map.put(edge[0], l0);
+            map.put(edge[1], l1);
+        }
+        int[] degrees = new int[n];
+        Queue<Integer> leaves = new LinkedList<>();
+        for(int key : map.keySet()){
+            degrees[key] = map.get(key).size();
+            if(degrees[key] == 1){
+                leaves.add(key);
+            }
+        }
+        List<Integer> roots = new ArrayList<>();
+        int nodes = n;
+        while(nodes > 2){
+            int leavesNum = leaves.size();
+            nodes-=leavesNum;
+            for(int i = 0; i < leavesNum; i++){
+                int cur = leaves.poll();
+                for(int neighbor : map.get(cur)){
+                    degrees[neighbor]--;
+                    if(degrees[neighbor] == 1){
+                        leaves.add(neighbor);
+                    }
+                }
+            }
+        }
+        roots.addAll(leaves);
+        return roots;
+    }
 }
