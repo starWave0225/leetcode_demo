@@ -357,6 +357,27 @@ public class Solution {
         return res;
     }
 
+    // 5. Longest Palindromic Substring
+    public String longestPalindrome(String s) {
+        int len = s.length();
+        if(len < 2) return s;
+        int max = 0;
+        String res = "";
+        boolean[][] canCut = new boolean[len][len];
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (s.charAt(i) == s.charAt(j) && (i - j <= 1 || canCut[j + 1][i - 1])) {
+                    canCut[j][i] = true;
+                    if(i - j + 1 > max){
+                        max = i - j + 1;
+                        res = s.substring(j, i+1);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
     // 132. Palindrome Partitioning II
     public int minCut(String s) {
         int len = s.length();
