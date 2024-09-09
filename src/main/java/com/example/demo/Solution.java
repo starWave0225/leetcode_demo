@@ -1,8 +1,6 @@
 package com.example.demo;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -360,7 +358,8 @@ public class Solution {
     // 5. Longest Palindromic Substring
     public String longestPalindrome(String s) {
         int len = s.length();
-        if(len < 2) return s;
+        if (len < 2)
+            return s;
         int max = 0;
         String res = "";
         boolean[][] canCut = new boolean[len][len];
@@ -368,9 +367,9 @@ public class Solution {
             for (int j = 0; j <= i; j++) {
                 if (s.charAt(i) == s.charAt(j) && (i - j <= 1 || canCut[j + 1][i - 1])) {
                     canCut[j][i] = true;
-                    if(i - j + 1 > max){
+                    if (i - j + 1 > max) {
                         max = i - j + 1;
-                        res = s.substring(j, i+1);
+                        res = s.substring(j, i + 1);
                     }
                 }
             }
@@ -449,7 +448,7 @@ public class Solution {
                 { { 0, -1 }, { -1, 0 } },
                 { { 0, 1 }, { -1, 0 } }
         };
-        Queue<int[]> queue = new temp<>();
+        Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[] { 0, 0 });
         int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
@@ -921,10 +920,10 @@ public class Solution {
 
     // 310. Minimum Height Trees
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
-        if(n == 1)
+        if (n == 1)
             return new ArrayList<Integer>(List.of(0));
         HashMap<Integer, List<Integer>> map = new HashMap<>();
-        for(int[] edge : edges){
+        for (int[] edge : edges) {
             List l0 = map.getOrDefault(edge[0], new ArrayList<Integer>());
             l0.add(edge[1]);
             List l1 = map.getOrDefault(edge[1], new ArrayList<Integer>());
@@ -934,22 +933,22 @@ public class Solution {
         }
         int[] degrees = new int[n];
         Queue<Integer> leaves = new LinkedList<>();
-        for(int key : map.keySet()){
+        for (int key : map.keySet()) {
             degrees[key] = map.get(key).size();
-            if(degrees[key] == 1){
+            if (degrees[key] == 1) {
                 leaves.add(key);
             }
         }
         List<Integer> roots = new ArrayList<>();
         int nodes = n;
-        while(nodes > 2){
+        while (nodes > 2) {
             int leavesNum = leaves.size();
-            nodes-=leavesNum;
-            for(int i = 0; i < leavesNum; i++){
+            nodes -= leavesNum;
+            for (int i = 0; i < leavesNum; i++) {
                 int cur = leaves.poll();
-                for(int neighbor : map.get(cur)){
+                for (int neighbor : map.get(cur)) {
                     degrees[neighbor]--;
-                    if(degrees[neighbor] == 1){
+                    if (degrees[neighbor] == 1) {
                         leaves.add(neighbor);
                     }
                 }
@@ -957,5 +956,55 @@ public class Solution {
         }
         roots.addAll(leaves);
         return roots;
+    }
+
+    // 830. Positions of Large Groups
+    public List<List<Integer>> largeGroupPositions(String s) {
+        List<List<Integer>> res = new ArrayList<>();
+        int cur = 0, start = 0;
+        char last = '0';
+        for (int i = 0; i < s.length(); i++) {
+            if (last == s.charAt(i)) {
+                cur++;
+            } else {
+                if (cur > 2) {
+                    List<Integer> temp = new ArrayList<>();
+                    temp.add(start);
+                    temp.add(i - 1);
+                    res.add(temp);
+                }
+                start = i;
+                cur = 1;
+                last = s.charAt(i);
+            }
+        }
+        if (cur > 2) {
+            List<Integer> temp = new ArrayList<>();
+            temp.add(start);
+            temp.add(start + cur - 1);
+            res.add(temp);
+        }
+        return res;
+    }
+
+    // 783. Minimum Distance Between BST Nodes
+    public int minDiffInBST(TreeNode root) {
+        int res = Integer.MAX_VALUE;
+        List<Integer> list = new ArrayList<>();
+        minDiffInBSTHelper(root, list);
+        Collections.sort(list);
+        int[] array = list.stream().mapToInt(Integer::intValue).toArray();
+        for (int i = 0; i < array.length - 1; i++) {
+            res = Math.min(res, array[i + 1] - array[i]);
+        }
+        return res;
+    }
+
+    public void minDiffInBSTHelper(TreeNode root, List<Integer> res) {
+        if (root == null)
+            return;
+        res.add(root.val);
+        minDiffInBSTHelper(root.left, res);
+        minDiffInBSTHelper(root.right, res);
     }
 }
