@@ -362,21 +362,21 @@ public class Solution {
         int len = s.length();
         int[] cuts = new int[len];
         boolean[][] canCut = new boolean[len][len];
-        for(int i = 0; i < len; i++){
+        for (int i = 0; i < len; i++) {
             int minCut = i;
-            for(int j = 0; j <= i; j++){
-                if(s.charAt(i) == s.charAt(j) && (i-j<=1 || canCut[j+1][i-1])){
+            for (int j = 0; j <= i; j++) {
+                if (s.charAt(i) == s.charAt(j) && (i - j <= 1 || canCut[j + 1][i - 1])) {
                     canCut[j][i] = true;
-                    if(j == 0){
+                    if (j == 0) {
                         minCut = 0;
                         continue;
                     }
-                    minCut = Math.min(minCut, cuts[j-1]+1);
+                    minCut = Math.min(minCut, cuts[j - 1] + 1);
                 }
             }
             cuts[i] = minCut;
         }
-        return cuts[len-1];
+        return cuts[len - 1];
     }
 
     // 1404. Number of Steps to Reduce a Number in Binary Representation to One
@@ -835,12 +835,12 @@ public class Solution {
     // 2022. Convert 1D Array Into 2D Array
     public int[][] construct2DArray(int[] original, int m, int n) {
         int len = original.length;
-        if(len != m * n){
+        if (len != m * n) {
             return new int[0][0];
         }
         int[][] res = new int[m][n];
-        for(int i = 0; i < m; i++){
-            for(int j = 0; j < n; j++){
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 res[i][j] = original[i * n + j];
             }
         }
@@ -856,8 +856,45 @@ public class Solution {
         return (s1 <= s2 && s2 <= e1) || (s2 <= s1 && s1 <= e2);
     }
 
-    public int haveConflictTime(String s){
-        String num = s.substring(0,2) + s.substring(3, 5);
+    public int haveConflictTime(String s) {
+        String num = s.substring(0, 2) + s.substring(3, 5);
         return Integer.parseInt(num);
+    }
+
+    // 2326. Spiral Matrix IV
+    public int[][] spiralMatrix(int m, int n, ListNode head) {
+        int[][] res = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                res[i][j] = -1;
+            }
+        }
+        boolean[][] visited = new boolean[m][n];
+        ListNode cur = head;
+        int i = 0, j = 0;
+        int newI = 0;
+        int newJ = 0;
+        int dir = 0;
+        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        visited[0][0] = true;
+        res[0][0] = cur.val;
+        cur = cur.next;
+        while (cur != null) {
+            int val = cur.val;
+            cur = cur.next;
+            newI = i + directions[dir][0];
+            newJ = j + directions[dir][1];
+            while (newI < 0 || newJ < 0 || newI >= m || newJ >= n || visited[newI][newJ]) {
+                dir += 1;
+                dir %= 4;
+                newI = i + directions[dir][0];
+                newJ = j + directions[dir][1];
+            }
+            i = newI;
+            j = newJ;
+            visited[newI][newJ] = true;
+            res[newI][newJ] = val;
+        }
+        return res;
     }
 }
