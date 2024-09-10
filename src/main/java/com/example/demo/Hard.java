@@ -1,13 +1,16 @@
 package com.example.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.print.DocFlavor.STRING;
 
@@ -268,6 +271,89 @@ public class Hard {
                     res.add(ii);
                     return res;
                 }
+            }
+        }
+        return res;
+    }
+
+    // 2146. K Highest Ranked Items Within a Price Range
+    public List<List<Integer>> highestRankedKItems(int[][] grid, int[] pricing, int[] start, int k) {
+        int m = grid.length, n = grid[0].length;
+        int price1 = pricing[0], price2 = pricing[1];
+        int[][] steps = new int[m][n];
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(
+                (b, a) -> {
+                    if (steps[a[0]][a[1]] != steps[b[0]][b[1]]) {
+                        return steps[a[0]][a[1]] - steps[b[0]][b[1]];
+                    }
+                    int v1 = grid[a[0]][a[1]];
+                    int v2 = grid[b[0]][b[1]];
+                    if (v1 != v2) {
+                        return v1 - v2;
+                    }
+                    if (a[0] != b[0]) {
+                        return a[0] - b[0];
+                    }
+                    return a[1] - b[1];
+                });
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(start);
+        boolean[][] visited = new boolean[m][n];
+        visited[start[0]][start[1]] = true;
+        int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+        while(!queue.isEmpty()){
+            int[] cur = queue.poll();
+            int p = grid[cur[0]][cur[1]];
+            if(p > 1 && price1 <= p && price2 >= p){
+                priorityQueue.add(cur);
+                if(priorityQueue.size()>k){
+                    priorityQueue.poll();
+                }
+            }
+            for(int dir = 0; dir < 4; dir++){
+                int ni = cur[0]+directions[dir][0];
+                int nj = cur[1]+directions[dir][1];
+                if(ni < 0 || nj < 0 || ni >= m || nj >= n || visited[ni][nj] || grid[ni][nj] == 0){
+                    continue;
+                }
+                visited[ni][nj] = true;
+                queue.add(new int[]{ni,nj});
+                steps[ni][nj] = steps[cur[0]][cur[1]]+1;
+            }
+        }
+        List<List<Integer>> res = new ArrayList<>();
+        while (!priorityQueue.isEmpty() && k > 0) {
+            List<Integer> temp = new ArrayList<>();
+            int[] cur = priorityQueue.poll();
+            temp.add(cur[0]);
+            temp.add(cur[1]);
+            res.addFirst(temp);
+            k--;
+        }
+        return res;
+    }
+
+    // 2101. Detonate the Maximum Bombs
+    public int maximumDetonation(int[][] bombs) {
+        int len = bombs.length;
+        int res = 0;
+        for(int i = 0; i < len; i++){
+            res = Math.max(res, maximumDetonationDfs(bombs, i, new boolean[len]));
+        }
+        return res;
+        
+    }
+
+    int maximumDetonationDfs(int[][] bombs, int x, boolean[] visited){
+        int res = 1;
+        visited[x] = true;
+        int[] bombx = bombs[x];
+        long r = bombx[2];
+        for(int i = 0; i < bombs.length; i++){
+            int[] bombi = bombs[i];
+            long x0 = bombx[0]-bombi[0], y0 = bombx[1]-bombi[1];
+            if(!visited[i] && x0*x0+y0*y0<=r*r){
+                res += maximumDetonationDfs(bombs, i, visited);
             }
         }
         return res;
