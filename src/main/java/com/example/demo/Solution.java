@@ -1007,4 +1007,68 @@ public class Solution {
         minDiffInBSTHelper(root.left, res);
         minDiffInBSTHelper(root.right, res);
     }
+
+    // 2807. Insert Greatest Common Divisors in Linked List
+    public ListNode insertGreatestCommonDivisors(ListNode head) {
+        ListNode p = head;
+        ListNode pre = head;
+        p = p.next;
+        while(p != null){
+            int v1 = p.val;
+            int preV = pre.val;
+            while(v1 != 0){
+                int temp =  v1;
+                v1 = preV % v1;
+                preV = temp;
+            }
+            ListNode node = new ListNode(preV);
+            pre.next = node;
+            node.next = p;
+            pre = p;
+            p = p.next;
+        }
+        return head;
+    }
+
+    // 1038. Binary Search Tree to Greater Sum Tree
+    int bstToGstRes = 0;
+
+    public TreeNode bstToGst(TreeNode root) {
+        if(root == null) return root;
+        bstToGst(root.right);
+        bstToGstRes += root.val;
+        root.val = bstToGstRes;
+        bstToGst(root.left);
+        return root;
+    }
+
+    //1971. Find if Path Exists in Graph
+    public boolean validPath(int n, int[][] edges, int source, int destination) {
+        boolean[] visited = new boolean[n];
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for(int[] edge : edges){
+            List list0 = map.getOrDefault(edge[0], new ArrayList<>());
+            list0.add(edge[1]);
+            map.put(edge[0], list0);
+            List list1 = map.getOrDefault(edge[1], new ArrayList<>());
+            list1.add(edge[0]);
+            map.put(edge[1], list1);
+        }   
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(source);
+        visited[source] = true;
+        while(!queue.isEmpty()){
+            int cur = queue.poll();
+            if(cur == destination){
+                return true;
+            }
+            for(int neighbor:map.get(cur)){
+                if(!visited[neighbor]){
+                    visited[neighbor] = true;
+                    queue.add(neighbor);
+                }
+            }
+        }
+        return false;
+    }
 }
