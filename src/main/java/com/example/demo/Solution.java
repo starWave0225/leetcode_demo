@@ -1071,4 +1071,50 @@ public class Solution {
         }
         return false;
     }
+
+    // 2220. Minimum Bit Flips to Convert Number
+    public int minBitFlips(int start, int goal) {
+        int res = 0;
+        int step = start ^ goal;
+        while(step != 0){
+            res += step&1;
+            step >>= 1;
+        }
+        return res;
+    }
+
+    // 2816. Double a Number Represented as a Linked List
+    public ListNode doubleIt(ListNode head) {
+        if(head == null){
+            return null;
+        }
+        ListNode reverseList = doubleItReverse(head);
+        ListNode p = reverseList;
+        ListNode pre = null;
+        int carry = 0;
+        while(p != null){
+            int t = 2 * p.val + carry;
+            p.val = t % 10;
+            carry = t / 10;
+            pre = p;
+            p = p.next;
+        }
+        if(carry != 0){
+            ListNode extra = new ListNode(carry);
+            pre.next = extra;
+        }
+        return doubleItReverse(reverseList);
+    }
+
+    public ListNode doubleItReverse(ListNode head){
+        ListNode pre = null;
+        ListNode p = head;
+        while(p!=null){
+            ListNode temp = p.next;
+            p.next = pre;
+            pre = p;
+            p = temp;
+        }
+        return pre;
+    }
 }
