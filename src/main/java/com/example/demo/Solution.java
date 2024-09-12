@@ -1013,11 +1013,11 @@ public class Solution {
         ListNode p = head;
         ListNode pre = head;
         p = p.next;
-        while(p != null){
+        while (p != null) {
             int v1 = p.val;
             int preV = pre.val;
-            while(v1 != 0){
-                int temp =  v1;
+            while (v1 != 0) {
+                int temp = v1;
                 v1 = preV % v1;
                 preV = temp;
             }
@@ -1034,7 +1034,8 @@ public class Solution {
     int bstToGstRes = 0;
 
     public TreeNode bstToGst(TreeNode root) {
-        if(root == null) return root;
+        if (root == null)
+            return root;
         bstToGst(root.right);
         bstToGstRes += root.val;
         root.val = bstToGstRes;
@@ -1042,28 +1043,28 @@ public class Solution {
         return root;
     }
 
-    //1971. Find if Path Exists in Graph
+    // 1971. Find if Path Exists in Graph
     public boolean validPath(int n, int[][] edges, int source, int destination) {
         boolean[] visited = new boolean[n];
         Map<Integer, List<Integer>> map = new HashMap<>();
-        for(int[] edge : edges){
+        for (int[] edge : edges) {
             List list0 = map.getOrDefault(edge[0], new ArrayList<>());
             list0.add(edge[1]);
             map.put(edge[0], list0);
             List list1 = map.getOrDefault(edge[1], new ArrayList<>());
             list1.add(edge[0]);
             map.put(edge[1], list1);
-        }   
+        }
         Queue<Integer> queue = new LinkedList<>();
         queue.add(source);
         visited[source] = true;
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int cur = queue.poll();
-            if(cur == destination){
+            if (cur == destination) {
                 return true;
             }
-            for(int neighbor:map.get(cur)){
-                if(!visited[neighbor]){
+            for (int neighbor : map.get(cur)) {
+                if (!visited[neighbor]) {
                     visited[neighbor] = true;
                     queue.add(neighbor);
                 }
@@ -1076,8 +1077,8 @@ public class Solution {
     public int minBitFlips(int start, int goal) {
         int res = 0;
         int step = start ^ goal;
-        while(step != 0){
-            res += step&1;
+        while (step != 0) {
+            res += step & 1;
             step >>= 1;
         }
         return res;
@@ -1085,36 +1086,72 @@ public class Solution {
 
     // 2816. Double a Number Represented as a Linked List
     public ListNode doubleIt(ListNode head) {
-        if(head == null){
+        if (head == null) {
             return null;
         }
         ListNode reverseList = doubleItReverse(head);
         ListNode p = reverseList;
         ListNode pre = null;
         int carry = 0;
-        while(p != null){
+        while (p != null) {
             int t = 2 * p.val + carry;
             p.val = t % 10;
             carry = t / 10;
             pre = p;
             p = p.next;
         }
-        if(carry != 0){
+        if (carry != 0) {
             ListNode extra = new ListNode(carry);
             pre.next = extra;
         }
         return doubleItReverse(reverseList);
     }
 
-    public ListNode doubleItReverse(ListNode head){
+    public ListNode doubleItReverse(ListNode head) {
         ListNode pre = null;
         ListNode p = head;
-        while(p!=null){
+        while (p != null) {
             ListNode temp = p.next;
             p.next = pre;
             pre = p;
             p = temp;
         }
         return pre;
+    }
+
+    // 2096. Step-By-Step Directions From a Binary Tree Node to Another
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        StringBuilder startStr = new StringBuilder();
+        StringBuilder endStr = new StringBuilder();
+        getDirectionsBfs(startValue, root, startStr);
+        getDirectionsBfs(destValue, root, endStr);
+        // 需要对root特殊处理
+        int max = Math.min(startStr.length(), endStr.length());
+        int i = 0;
+        while (i < max && startStr.charAt(startStr.length() - 1 - i) == endStr.charAt(endStr.length() - 1 - i)) {
+            i++;
+        }
+        StringBuilder resStr = new StringBuilder();
+        for(int j = 0; j < startStr.length() - i; j++){
+            resStr.append('U');
+        }
+        String leftString = endStr.reverse().substring(i);
+        resStr.append(leftString);
+        return resStr.toString();
+    }
+
+    public boolean getDirectionsBfs(int v, TreeNode node, StringBuilder sb) {
+        if (node.val == v) {
+            return true;
+        }
+        if (node.left != null && getDirectionsBfs(v, node.left, sb)) {
+            sb.append('L');
+            return true;
+        }
+        if (node.right != null && getDirectionsBfs(v, node.right, sb)) {
+            sb.append('R');
+            return true;
+        }
+        return false;
     }
 }
