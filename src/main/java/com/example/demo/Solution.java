@@ -1188,12 +1188,33 @@ public class Solution {
         }
         int res = 0;
         for (int i = 0; i < words.length; i++) {
-            for(int j = i+1; j < words.length; j++){
-                if(sets[i].equals(sets[j])){
+            for (int j = i + 1; j < words.length; j++) {
+                if (sets[i].equals(sets[j])) {
                     res++;
                 }
             }
         }
         return res;
+    }
+
+    // 650. 2 Keys Keyboard, 问的是最少步数
+    public int minSteps(int n) {
+        if (n == 1)
+            return 0;
+        if (n == 2)
+            return 2;
+
+        int steps = 0;
+        int factor = 2;
+
+        while (n > 1) {
+            while (n % factor == 0) {
+                steps += factor;
+                n /= factor;
+            }
+            factor++;
+        }
+
+        return steps;
     }
 }
