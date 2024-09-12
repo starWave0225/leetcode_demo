@@ -1132,7 +1132,7 @@ public class Solution {
             i++;
         }
         StringBuilder resStr = new StringBuilder();
-        for(int j = 0; j < startStr.length() - i; j++){
+        for (int j = 0; j < startStr.length() - i; j++) {
             resStr.append('U');
         }
         String leftString = endStr.reverse().substring(i);
@@ -1153,5 +1153,47 @@ public class Solution {
             return true;
         }
         return false;
+    }
+
+    // 1684. Count the Number of Consistent Strings
+    public int countConsistentStrings(String allowed, String[] words) {
+        boolean[] ch = new boolean[26];
+        for (int i = 0; i < allowed.length(); i++) {
+            ch[allowed.charAt(i) - 'a'] = true;
+        }
+        int res = 0;
+        for (String str : words) {
+            boolean flag = true;
+            for (int i = 0; i < str.length(); i++) {
+                if (ch[str.charAt(i) - 'a'])
+                    continue;
+                flag = false;
+                break;
+            }
+            if (flag)
+                res++;
+        }
+        return res;
+    }
+
+    // 2506. Count Pairs Of Similar Strings
+    public int similarPairs(String[] words) {
+        HashSet<Character>[] sets = new HashSet[words.length];
+        for (int i = 0; i < words.length; i++) {
+            sets[i] = new HashSet<>();
+            String word = words[i];
+            for (int j = 0; j < word.length(); j++) {
+                sets[i].add(word.charAt(j));
+            }
+        }
+        int res = 0;
+        for (int i = 0; i < words.length; i++) {
+            for(int j = i+1; j < words.length; j++){
+                if(sets[i].equals(sets[j])){
+                    res++;
+                }
+            }
+        }
+        return res;
     }
 }
