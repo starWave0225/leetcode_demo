@@ -1248,16 +1248,47 @@ public class Solution {
             max = Math.max(max, nums[i]);
         }
         int curNum = 0;
-        for(int i = 0; i < nums.length; i++){
-            if(nums[i] == max){
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == max) {
                 curNum++;
-            }
-            else{
+            } else {
                 res = Math.max(curNum, res);
                 curNum = 0;
             }
         }
         res = Math.max(curNum, res);
         return res;
+    }
+
+    // 1805. Number of Different Integers in a String
+    public int numDifferentIntegers(String word) {
+        int p = 0;
+        int len = word.length();
+        StringBuilder sb = new StringBuilder();
+        Set<String> set = new HashSet<>();
+        while (p < len) {
+            if (word.charAt(p) >= '0' && word.charAt(p) <= '9') {
+                sb.append(word.charAt(p));
+            } else if (sb.length() != 0) {
+                while (sb.length() >= 2 && sb.charAt(0) == '0') {
+                    sb.delete(0, 1);
+                }
+                set.add(sb.toString());
+                sb = new StringBuilder();
+            }
+            p++;
+        }
+        if (sb.length() != 0) {
+            while (sb.length() >= 2 && sb.charAt(0) == '0') {
+                sb.delete(0, 1);
+            }
+            set.add(sb.toString());
+        }
+        return set.size();
+    }
+
+    // 19. Remove Nth Node From End of List
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+
     }
 }
