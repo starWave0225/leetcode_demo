@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
+import ch.qos.logback.core.rolling.helper.IntegerTokenConverter;
+
 public class Solution {
     Logger logger = Logger.getLogger(getClass().getName());
     int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
@@ -1223,19 +1225,39 @@ public class Solution {
         int len = arr.length;
         int[] pre = new int[len];
         pre[0] = arr[0];
-        for(int i = 1; i < len; i++){
-            pre[i] = pre[i-1]^arr[i];
+        for (int i = 1; i < len; i++) {
+            pre[i] = pre[i - 1] ^ arr[i];
         }
         int[] res = new int[queries.length];
-        for(int i = 0; i< queries.length; i++){
-            int l = queries[i][0], r=queries[i][1];
-            if(l == 0){
+        for (int i = 0; i < queries.length; i++) {
+            int l = queries[i][0], r = queries[i][1];
+            if (l == 0) {
                 res[i] = pre[r];
-            }
-            else{
-                res[i] = pre[r]^pre[l-1];
+            } else {
+                res[i] = pre[r] ^ pre[l - 1];
             }
         }
+        return res;
+    }
+
+    // 2419. Longest Subarray With Maximum Bitwise AND
+    public int longestSubarray(int[] nums) {
+        int res = 1;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            max = Math.max(max, nums[i]);
+        }
+        int curNum = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] == max){
+                curNum++;
+            }
+            else{
+                res = Math.max(curNum, res);
+                curNum = 0;
+            }
+        }
+        res = Math.max(curNum, res);
         return res;
     }
 }
