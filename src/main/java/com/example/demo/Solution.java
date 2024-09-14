@@ -1289,6 +1289,19 @@ public class Solution {
 
     // 19. Remove Nth Node From End of List
     public ListNode removeNthFromEnd(ListNode head, int n) {
-
+        ListNode dummyhead = new ListNode(), p1 = dummyhead, p2 = head;
+        dummyhead.next = head;
+        int i = 0; 
+        while(i < n){
+            p2 = p2.next;
+            i++;
+        }
+        while(p2 != null){
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        if(p1.next == null) return dummyhead;
+        p1.next = p1.next.next;
+        return dummyhead.next;
     }
 }
