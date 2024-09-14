@@ -1304,4 +1304,48 @@ public class Solution {
         p1.next = p1.next.next;
         return dummyhead.next;
     }
+
+    // 24. Swap Nodes in Pairs
+    public ListNode swapPairs(ListNode head) {
+        if(head == null){
+            return head;
+        }
+        ListNode dummyhead = new ListNode();
+        dummyhead.next = head;
+        ListNode p1 = head, p2 = head.next, pre = dummyhead;
+        while(p1 != null && p2 != null){
+            ListNode next = p2.next;
+            pre.next = p2;
+            p2.next = p1;
+            p1.next = next;
+            pre = p1;
+            p1 = next;
+            if(p1==null) break;
+            p2 = next.next;
+        }
+        return dummyhead.next;
+    }
+
+    // 1721. Swapping Nodes in a Linked List
+    public ListNode swapNodes(ListNode head, int k) {
+        ListNode dummyhead = new ListNode();
+        dummyhead.next = head;
+        ListNode p1 = dummyhead, pre1 = dummyhead;
+        for(int i = 0; i < k; i++){
+            pre1 = p1;
+            p1 = p1.next;
+        }
+        ListNode p2 = dummyhead, pre2 = p2,  cur = p1;
+        while(cur != null){
+            cur = cur.next;
+            pre2 = p2;
+            p2 = p2.next;
+        }
+        pre2.next = p1;
+        pre1.next = p2;
+        ListNode temp = p1.next;
+        p1.next = p2.next;
+        p2.next = temp;
+        return dummyhead.next;
+    }
 }
