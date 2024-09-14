@@ -301,24 +301,24 @@ public class Hard {
         boolean[][] visited = new boolean[m][n];
         visited[start[0]][start[1]] = true;
         int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int[] cur = queue.poll();
             int p = grid[cur[0]][cur[1]];
-            if(p > 1 && price1 <= p && price2 >= p){
+            if (p > 1 && price1 <= p && price2 >= p) {
                 priorityQueue.add(cur);
-                if(priorityQueue.size()>k){
+                if (priorityQueue.size() > k) {
                     priorityQueue.poll();
                 }
             }
-            for(int dir = 0; dir < 4; dir++){
-                int ni = cur[0]+directions[dir][0];
-                int nj = cur[1]+directions[dir][1];
-                if(ni < 0 || nj < 0 || ni >= m || nj >= n || visited[ni][nj] || grid[ni][nj] == 0){
+            for (int dir = 0; dir < 4; dir++) {
+                int ni = cur[0] + directions[dir][0];
+                int nj = cur[1] + directions[dir][1];
+                if (ni < 0 || nj < 0 || ni >= m || nj >= n || visited[ni][nj] || grid[ni][nj] == 0) {
                     continue;
                 }
                 visited[ni][nj] = true;
-                queue.add(new int[]{ni,nj});
-                steps[ni][nj] = steps[cur[0]][cur[1]]+1;
+                queue.add(new int[] { ni, nj });
+                steps[ni][nj] = steps[cur[0]][cur[1]] + 1;
             }
         }
         List<List<Integer>> res = new ArrayList<>();
@@ -337,25 +337,67 @@ public class Hard {
     public int maximumDetonation(int[][] bombs) {
         int len = bombs.length;
         int res = 0;
-        for(int i = 0; i < len; i++){
+        for (int i = 0; i < len; i++) {
             res = Math.max(res, maximumDetonationDfs(bombs, i, new boolean[len]));
         }
         return res;
-        
+
     }
 
-    int maximumDetonationDfs(int[][] bombs, int x, boolean[] visited){
+    int maximumDetonationDfs(int[][] bombs, int x, boolean[] visited) {
         int res = 1;
         visited[x] = true;
         int[] bombx = bombs[x];
         long r = bombx[2];
-        for(int i = 0; i < bombs.length; i++){
+        for (int i = 0; i < bombs.length; i++) {
             int[] bombi = bombs[i];
-            long x0 = bombx[0]-bombi[0], y0 = bombx[1]-bombi[1];
-            if(!visited[i] && x0*x0+y0*y0<=r*r){
+            long x0 = bombx[0] - bombi[0], y0 = bombx[1] - bombi[1];
+            if (!visited[i] && x0 * x0 + y0 * y0 <= r * r) {
                 res += maximumDetonationDfs(bombs, i, visited);
             }
         }
         return res;
+    }
+
+    // 25. Reverse Nodes in k-Group
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummyhead = new ListNode();
+        dummyhead.next = head;
+        ListNode p = dummyhead, p2 = dummyhead, next = dummyhead, lashH = head;
+        int curN = 0;
+        while (p != null) {
+            if (curN == k) {
+                next = p.next;
+                p.next = null;
+                ListNode temp = reverseKNodeHelper(lashH);
+                p2.next = temp;
+                p2 = lashH;
+                lashH = next;
+                p = next;
+                curN = 1;
+            } else {
+                p = p.next;
+                curN++;
+            }
+        }
+        if(next != null){
+            p2.next = next;
+        }
+        return dummyhead.next;
+    }
+
+    public ListNode reverseKNodeHelper(ListNode head) {
+        ListNode pre = null;
+        ListNode cur = head, next = head;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
     }
 }
