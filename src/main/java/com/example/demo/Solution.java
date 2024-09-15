@@ -1462,11 +1462,70 @@ public class Solution {
                     num++;
                 }
             }
-            if(minCity >= num){
+            if (minCity >= num) {
                 minCity = num;
                 res = i;
             }
         }
         return res;
+    }
+
+    // 350. Intersection of Two Arrays II
+    public int[] intersect(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int num : nums1) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        List<Integer> list = new ArrayList<>();
+        for (int num : nums2) {
+            if (map.containsKey(num)) {
+                int temp = map.get(num) - 1;
+                if (temp == 0) {
+                    map.remove(num);
+                } else {
+                    map.put(num, temp);
+                }
+                list.add(num);
+            }
+        }
+        int[] res = new int[list.size()];
+        int i = 0;
+        for (int num : list) {
+            res[i] = num;
+            i++;
+        }
+        return res;
+    }
+
+    // 3099. Harshad Number
+    public int sumOfTheDigitsOfHarshadNumber(int x) {
+        int sum = 0;
+        int temp = x;
+        while (temp != 0) {
+            sum += temp % 10;
+            temp /= 10;
+        }
+        if (x % sum == 0)
+            return sum;
+        return -1;
+    }
+
+    // 3095. Shortest Subarray With OR at Least K I
+    public int minimumSubarrayLength(int[] nums, int k) {
+        int n = nums.length;
+        int min = n + 1;
+        for (int i = 0; i < n; i++) {
+            int cur = 0;
+            for (int j = i; j < n; j++) {
+                cur |= nums[j];
+                if (cur >= k) {
+                    min = Math.min(min, j - i + 1);
+                    break;
+                }
+            }
+        }
+        if (min > n)
+            return -1;
+        return min;
     }
 }
