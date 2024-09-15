@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1291,36 +1292,38 @@ public class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dummyhead = new ListNode(), p1 = dummyhead, p2 = head;
         dummyhead.next = head;
-        int i = 0; 
-        while(i < n){
+        int i = 0;
+        while (i < n) {
             p2 = p2.next;
             i++;
         }
-        while(p2 != null){
+        while (p2 != null) {
             p1 = p1.next;
             p2 = p2.next;
         }
-        if(p1.next == null) return dummyhead;
+        if (p1.next == null)
+            return dummyhead;
         p1.next = p1.next.next;
         return dummyhead.next;
     }
 
     // 24. Swap Nodes in Pairs
     public ListNode swapPairs(ListNode head) {
-        if(head == null){
+        if (head == null) {
             return head;
         }
         ListNode dummyhead = new ListNode();
         dummyhead.next = head;
         ListNode p1 = head, p2 = head.next, pre = dummyhead;
-        while(p1 != null && p2 != null){
+        while (p1 != null && p2 != null) {
             ListNode next = p2.next;
             pre.next = p2;
             p2.next = p1;
             p1.next = next;
             pre = p1;
             p1 = next;
-            if(p1==null) break;
+            if (p1 == null)
+                break;
             p2 = next.next;
         }
         return dummyhead.next;
@@ -1331,12 +1334,12 @@ public class Solution {
         ListNode dummyhead = new ListNode();
         dummyhead.next = head;
         ListNode p1 = dummyhead, pre1 = dummyhead;
-        for(int i = 0; i < k; i++){
+        for (int i = 0; i < k; i++) {
             pre1 = p1;
             p1 = p1.next;
         }
-        ListNode p2 = dummyhead, pre2 = p2,  cur = p1;
-        while(cur != null){
+        ListNode p2 = dummyhead, pre2 = p2, cur = p1;
+        while (cur != null) {
             cur = cur.next;
             pre2 = p2;
             p2 = p2.next;
@@ -1347,5 +1350,123 @@ public class Solution {
         p1.next = p2.next;
         p2.next = temp;
         return dummyhead.next;
+    }
+
+    // 1371. Find the Longest Substring Containing Vowels in Even Counts
+    public int findTheLongestSubstring(String s) {
+        int mask = 0;
+        int res = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            switch (ch) {
+                case 'a':
+                    mask ^= 1;
+                    break;
+                case 'e':
+                    mask ^= 2;
+                    break;
+                case 'i':
+                    mask ^= 4;
+                    break;
+                case 'o':
+                    mask ^= 8;
+                    break;
+                case 'u':
+                    mask ^= 16;
+                    break;
+                default:
+                    break;
+            }
+            if (map.containsKey(mask)) {
+                res = Math.max(res, i - map.get(mask));
+            } else {
+                map.put(mask, i);
+            }
+        }
+        return res;
+    }
+
+    // 29. Divide Two Integers
+    public int divide(int dividend, int divisor) {
+        long sign = 1;
+        if (divisor == 1)
+            return dividend;
+        if ((dividend < 0 && divisor >= 0) || (dividend >= 0 && divisor < 0))
+            sign = -1;
+        long cur = 0;
+        long dividendLong = Math.abs(dividend);
+        long divisorLong = Math.abs(divisor);
+        for (int i = 30; i >= 0; i--) {
+            if (dividendLong >= (divisorLong << i)) {
+                cur += (1 << i);
+                dividendLong -= (divisorLong << i);
+            }
+        }
+        return (int) (sign * cur);
+    }
+
+    // 67. Add Binary
+    public String addBinary(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int al = a.length() - 1, bl = b.length() - 1;
+        int carry = 0;
+        while (al >= 0 || bl >= 0 || carry != 0) {
+            if (al >= 0) {
+                carry += a.charAt(al) - '0';
+                al--;
+            }
+            if (bl >= 0) {
+                carry += b.charAt(bl) - '0';
+                bl--;
+            }
+            if (carry % 2 == 1) {
+                sb.append('1');
+            } else {
+                sb.append('0');
+            }
+            carry /= 2;
+        }
+        sb.reverse();
+        return sb.toString();
+    }
+
+    // 1334. Find the City With the Smallest Number of Neighbors at a Threshold
+    // Distance
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        int[][] dist = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(dist[i], 10001);
+        }
+        for (int[] edeg : edges) {
+            int from = edeg[0];
+            int to = edeg[1];
+            int distance = edeg[2];
+            dist[from][to] = distance;
+            dist[to][from] = distance;
+        }
+        for (int k = 0; k < n; ++k) {
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < n; ++j) {
+                    dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
+            }
+        }
+        int res = 0;
+        int minCity = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            int num = 0;
+            for (int j = 0; j < n; j++) {
+                if (i != j && dist[i][j] <= distanceThreshold) {
+                    num++;
+                }
+            }
+            if(minCity >= num){
+                minCity = num;
+                res = i;
+            }
+        }
+        return res;
     }
 }
