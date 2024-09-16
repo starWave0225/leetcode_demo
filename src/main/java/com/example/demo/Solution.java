@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
-import ch.qos.logback.core.rolling.helper.IntegerTokenConverter;
 
 public class Solution {
     Logger logger = Logger.getLogger(getClass().getName());
@@ -1527,5 +1526,29 @@ public class Solution {
         if (min > n)
             return -1;
         return min;
+    }
+
+    // 539. Minimum Time Difference
+    public int findMinDifference(List<String> timePoints) {
+        int n = timePoints.size();
+        int[] times = new int[n];
+        int i = 0;
+        for (String time : timePoints) {
+            String[] timea = time.split(":");
+            int ha = Integer.parseInt(timea[0]);
+            int ma = Integer.parseInt(timea[1]);
+            times[i++] = ha * 60 + ma;
+        }
+        Arrays.sort(times);
+        int res = Integer.MAX_VALUE;
+        for (int j = 0; j < n - 1; j++) {
+            int diff = times[j + 1] - times[j];
+            res = Math.min(res, diff);
+            if (res == 0)
+                return 0;
+        }
+        int diff = 24 * 60 - times[n - 1] + times[0];
+        res = Math.min(res, diff);
+        return res;
     }
 }
