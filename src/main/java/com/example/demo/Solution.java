@@ -1551,4 +1551,86 @@ public class Solution {
         res = Math.min(res, diff);
         return res;
     }
+
+    // 884. Uncommon Words from Two Sentences
+    public String[] uncommonFromSentences(String s1, String s2) {
+        String[] ss1 = s1.split(" ");
+        String[] ss2 = s2.split(" ");
+        Set<String> set = new HashSet<>();
+        Set<String> mulSet = new HashSet<>();
+        for (int i = 0; i < ss1.length; i++) {
+            if (set.contains(ss1[i])) {
+                mulSet.add(ss1[i]);
+            } else {
+                set.add(ss1[i]);
+            }
+        }
+        Set<String> set2 = new HashSet<>();
+        for (int i = 0; i < ss2.length; i++) {
+            if (set2.contains(ss2[i])) {
+                mulSet.add(ss2[i]);
+            } else {
+                set2.add(ss2[i]);
+            }
+        }
+        List<String> res = new ArrayList<>();
+        for(String str : set){
+            if(mulSet.contains(str)){
+                continue;
+            }
+            if(!set2.contains(str)){
+                res.add(str);
+            }
+        }
+        for(String str : set2){
+            if(mulSet.contains(str)){
+                continue;
+            }
+            if(!set.contains(str)){
+                res.add(str);
+            }
+        }
+        return res.toArray(new String[0]);
+    }
+
+    // 36. Valid Sudoku
+    public boolean isValidSudoku(char[][] board) {
+        for (int i = 0; i < 9; i++) {
+            boolean[] visited = new boolean[9];
+            boolean[] visited2 = new boolean[9];
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+
+                    if (visited[board[i][j] - '0' - 1]) {
+                        return false;
+                    }
+                    visited[board[i][j] - '0' - 1] = true;
+                }
+                if (board[j][i] != '.') {
+
+                    if (visited2[board[j][i] - '0' - 1]) {
+                        return false;
+                    }
+                    visited2[board[j][i] - '0' - 1] = true;
+                }
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                boolean[] visited = new boolean[9];
+                for (int k = 0; k < 3; k++) {
+                    for (int l = 0; l < 3; l++) {
+                        if (board[i * 3 + k][j * 3 + l] == '.') {
+                            continue;
+                        }
+                        if (visited[board[i * 3 + k][j * 3 + l] - '0' - 1]) {
+                            return false;
+                        }
+                        visited[board[i * 3 + k][j * 3 + l] - '0' - 1] = true;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }
