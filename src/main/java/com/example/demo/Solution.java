@@ -1633,4 +1633,51 @@ public class Solution {
         }
         return true;
     }
+
+    // 71. Simplify Path
+    public String simplifyPath(String path) {
+        Stack<String> stack = new Stack<>();
+        String[] files = path.split("/");
+        List<String> list = Arrays.asList("",".","..");
+        for(String file:files){
+            if(!stack.isEmpty() && file.equals("..")){
+                stack.pop();
+            }
+            else if(!list.contains(file)){
+                stack.add(file);
+            }
+        }
+        return "/"+String.join("/", stack);
+    }
+
+    // 103. Binary Tree Zigzag Level Order Traversal
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        queue.add(root);
+        if(root == null){
+            return res;
+        }
+        int level = 0;
+        while(!queue.isEmpty()){
+            int curLength = queue.size();
+            List<Integer> temp = new ArrayList<>();
+            for(int i = 0; i < curLength; i++){
+                TreeNode node = queue.poll();
+                temp.add(node.val);
+                if(node.left != null){
+                    queue.add(node.left);
+                }
+                if(node.right != null){
+                    queue.add(node.right);
+                }
+            }
+            if(level % 2 == 1){
+                Collections.reverse(temp);
+            }
+            res.add(temp);
+            level++;
+        }
+        return res;
+    }
 }
