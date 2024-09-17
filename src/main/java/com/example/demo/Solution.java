@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
-
 public class Solution {
     Logger logger = Logger.getLogger(getClass().getName());
     int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
@@ -1574,19 +1573,19 @@ public class Solution {
             }
         }
         List<String> res = new ArrayList<>();
-        for(String str : set){
-            if(mulSet.contains(str)){
+        for (String str : set) {
+            if (mulSet.contains(str)) {
                 continue;
             }
-            if(!set2.contains(str)){
+            if (!set2.contains(str)) {
                 res.add(str);
             }
         }
-        for(String str : set2){
-            if(mulSet.contains(str)){
+        for (String str : set2) {
+            if (mulSet.contains(str)) {
                 continue;
             }
-            if(!set.contains(str)){
+            if (!set.contains(str)) {
                 res.add(str);
             }
         }
@@ -1638,16 +1637,15 @@ public class Solution {
     public String simplifyPath(String path) {
         Stack<String> stack = new Stack<>();
         String[] files = path.split("/");
-        List<String> list = Arrays.asList("",".","..");
-        for(String file:files){
-            if(!stack.isEmpty() && file.equals("..")){
+        List<String> list = Arrays.asList("", ".", "..");
+        for (String file : files) {
+            if (!stack.isEmpty() && file.equals("..")) {
                 stack.pop();
-            }
-            else if(!list.contains(file)){
+            } else if (!list.contains(file)) {
                 stack.add(file);
             }
         }
-        return "/"+String.join("/", stack);
+        return "/" + String.join("/", stack);
     }
 
     // 103. Binary Tree Zigzag Level Order Traversal
@@ -1655,24 +1653,24 @@ public class Solution {
         Queue<TreeNode> queue = new LinkedList<>();
         List<List<Integer>> res = new ArrayList<>();
         queue.add(root);
-        if(root == null){
+        if (root == null) {
             return res;
         }
         int level = 0;
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int curLength = queue.size();
             List<Integer> temp = new ArrayList<>();
-            for(int i = 0; i < curLength; i++){
+            for (int i = 0; i < curLength; i++) {
                 TreeNode node = queue.poll();
                 temp.add(node.val);
-                if(node.left != null){
+                if (node.left != null) {
                     queue.add(node.left);
                 }
-                if(node.right != null){
+                if (node.right != null) {
                     queue.add(node.right);
                 }
             }
-            if(level % 2 == 1){
+            if (level % 2 == 1) {
                 Collections.reverse(temp);
             }
             res.add(temp);
@@ -1689,12 +1687,11 @@ public class Solution {
         ListNode greater = new ListNode();
         ListNode greaterHead = greater;
         greaterHead.next = greater;
-        while(p!=null){
-            if(p.val < x){
+        while (p != null) {
+            if (p.val < x) {
                 less.next = p;
                 less = p;
-            }
-            else{
+            } else {
                 greater.next = p;
                 greater = p;
             }
@@ -1707,14 +1704,16 @@ public class Solution {
 
     // 96. Unique Binary Search Trees
     public int numTrees(int n) {
-        if(n == 0) return 1;
-        if(n == 1) return 1;
-        int[] nums = new int[n+1];
+        if (n == 0)
+            return 1;
+        if (n == 1)
+            return 1;
+        int[] nums = new int[n + 1];
         nums[0] = 1;
         nums[1] = 1;
-        for(int i =2;i<=n;i++){
-            for(int j=1; j<=i; ++j) {
-                nums[i] += nums[j-1] * nums[i-j];
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j <= i; ++j) {
+                nums[i] += nums[j - 1] * nums[i - j];
             }
         }
         return nums[n];
@@ -1722,25 +1721,27 @@ public class Solution {
 
     // 61. Rotate List
     public ListNode rotateRight(ListNode head, int k) {
-        if(k == 0 || head == null || head.next==null) return head;
+        if (k == 0 || head == null || head.next == null)
+            return head;
         ListNode p = head;
         int l = 0;
-        while(p!=null){
+        while (p != null) {
             l++;
             p = p.next;
         }
         k %= l;
-        if(k == 0) return head;
+        if (k == 0)
+            return head;
         ListNode p1 = new ListNode();
         p1.next = head;
         ListNode p2 = new ListNode();
         l = 0;
-        while(l < k){
+        while (l < k) {
             p1 = p1.next;
             l++;
         }
         p2.next = head;
-        while(p1.next != null){
+        while (p1.next != null) {
             p2 = p2.next;
             p1 = p1.next;
         }
@@ -1752,15 +1753,37 @@ public class Solution {
 
     // 137. Single Number II
     public int singleNumber(int[] nums) {
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for(int num : nums){
-            map.put(num, map.getOrDefault(num, 0)+1);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
-        for(int num : map.keySet()){
-            if(map.get(num)==1){
+        for (int num : map.keySet()) {
+            if (map.get(num) == 1) {
                 return num;
             }
         }
         return -1;
+    }
+
+    // 48. Rotate Image
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        int t = 0, b = n - 1;
+        while (t < b) {
+            for (int i = 0; i < n; i++) {
+                int temp = matrix[t][i];
+                matrix[t][i] = matrix[b][i];
+                matrix[b][i] = temp;
+            }
+            t++;
+            b--;
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
     }
 }

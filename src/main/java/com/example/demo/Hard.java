@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -383,7 +384,7 @@ public class Hard {
                 curN++;
             }
         }
-        if(next != null){
+        if (next != null) {
             p2.next = next;
         }
         return dummyhead.next;
@@ -402,5 +403,35 @@ public class Hard {
     }
 
     // 87. Scramble String
-    
+    Map<String, Boolean> isScrambleMap = new HashMap<>();
+
+    public boolean isScramble(String s1, String s2) {
+        int n = s1.length();
+        if (s1.equals(s2))
+            return true;
+        int[] a = new int[26], b = new int[26], c = new int[26];
+        if (isScrambleMap.containsKey(s1 + s2)) {
+            return isScrambleMap.get(s1 + s2);
+        }
+        for (int i = 1; i < n; i++) {
+            int j = n - i;
+            a[s1.charAt(i - 1) - 'a']++;
+            b[s2.charAt(i - 1) - 'a']++;
+            c[s2.charAt(j)-'a']++;
+            // check if the current substring has the same characters
+            if (Arrays.equals(a, b) && isScramble(s1.substring(0, i), s2.substring(0, i))
+                    && isScramble(s1.substring(i), s2.substring(i))) {
+                // if the substrings are scrambled versions of each other, return true
+                isScrambleMap.put(s1 + s2, true);
+                return true;
+            }
+            if (Arrays.equals(a, c) && isScramble(s1.substring(0, i), s2.substring(j)) && isScramble(s1.substring(i), s2.substring(0, j))) {
+                // if the substrings are scrambled versions of each other, return true
+                isScrambleMap.put(s1 + s2, true);
+                return true;
+            }
+        }
+        isScrambleMap.put(s1 + s2, false);
+        return false;
+    }
 }
