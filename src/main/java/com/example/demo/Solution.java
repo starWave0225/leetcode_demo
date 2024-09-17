@@ -1680,4 +1680,87 @@ public class Solution {
         }
         return res;
     }
+
+    // 86. Partition List
+    public ListNode partition(ListNode head, int x) {
+        ListNode p = head;
+        ListNode less = new ListNode();
+        ListNode lessHead = less;
+        ListNode greater = new ListNode();
+        ListNode greaterHead = greater;
+        greaterHead.next = greater;
+        while(p!=null){
+            if(p.val < x){
+                less.next = p;
+                less = p;
+            }
+            else{
+                greater.next = p;
+                greater = p;
+            }
+            p = p.next;
+        }
+        greater.next = null;
+        less.next = greaterHead.next;
+        return lessHead.next;
+    }
+
+    // 96. Unique Binary Search Trees
+    public int numTrees(int n) {
+        if(n == 0) return 1;
+        if(n == 1) return 1;
+        int[] nums = new int[n+1];
+        nums[0] = 1;
+        nums[1] = 1;
+        for(int i =2;i<=n;i++){
+            for(int j=1; j<=i; ++j) {
+                nums[i] += nums[j-1] * nums[i-j];
+            }
+        }
+        return nums[n];
+    }
+
+    // 61. Rotate List
+    public ListNode rotateRight(ListNode head, int k) {
+        if(k == 0 || head == null || head.next==null) return head;
+        ListNode p = head;
+        int l = 0;
+        while(p!=null){
+            l++;
+            p = p.next;
+        }
+        k %= l;
+        if(k == 0) return head;
+        ListNode p1 = new ListNode();
+        p1.next = head;
+        ListNode p2 = new ListNode();
+        l = 0;
+        while(l < k){
+            p1 = p1.next;
+            l++;
+        }
+        p2.next = head;
+        while(p1.next != null){
+            p2 = p2.next;
+            p1 = p1.next;
+        }
+        ListNode newHead = p2.next;
+        p2.next = null;
+        p1.next = head;
+        return newHead;
+    }
+
+    // 137. Single Number II
+    public int singleNumber(int[] nums) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int num : nums){
+            map.put(num, map.getOrDefault(num, 0)+1);
+        }
+        for(int num : map.keySet()){
+            if(map.get(num)==1){
+                return num;
+            }
+        }
+        return -1;
+    }
 }
