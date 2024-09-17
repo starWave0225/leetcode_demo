@@ -400,4 +400,7 @@ public class Hard {
         }
         return pre;
     }
+
+    // 87. Scramble String
+    
 }
