@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1786,4 +1787,97 @@ public class Solution {
             }
         }
     }
+
+    // 179. Largest Number
+    public String largestNumber(int[] nums) {
+        int n = nums.length;
+        Integer[] numsInt = new Integer[n];
+        boolean flag = true;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != 0) {
+                flag = false;
+            }
+            numsInt[i] = nums[i]; // Auto-boxing
+        }
+        if (flag)
+            return "0";
+        Arrays.sort(numsInt, (a, b) -> {
+            String stra = a.toString();
+            String strb = b.toString();
+            return (stra + strb).compareTo(strb + stra);
+        });
+        StringBuilder res = new StringBuilder();
+        for (int k = n - 1; k >= 0; k--) {
+            res.append(numsInt[k]);
+        }
+        return res.toString();
+    }
+
+    // 2487. Remove Nodes From Linked List
+    public ListNode removeNodes(ListNode head) {
+        // List<Integer> list = new ArrayList<>();
+        // ListNode p = head;
+        // while (p != null) {
+        // list.add(p.val);
+        // p = p.next;
+        // }
+        // int max = list.get(list.size() - 1);
+        // List<Integer> list2 = new ArrayList<>();
+        // for (int i = list.size() - 2; i >= 0; i--) {
+        // if (max <= list.get(i)) {
+        // max = list.get(i);
+        // } else {
+        // list2.add(0, list.get(i));
+        // }
+        // }
+        // int i = 0;
+        // ListNode dummyHead = new ListNode();
+        // p = dummyHead;
+        // ListNode cur = head;
+        // while (i < list2.size()) {
+        // if(cur.val != list2.get(i)){
+        // p.next = cur;
+        // p = p.next;
+        // } else{
+        // i++;
+        // }
+        // cur = cur.next;
+        // }
+        // if(cur != null){
+        // p.next = cur;
+        // }
+        // return dummyHead.next;
+        if (head.next == null) {
+            return head;
+        }
+
+        ListNode next = null;
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        head = prev;
+        curr = head.next;
+
+        while (curr != null) {
+            if (curr.val < prev.val) {
+                curr = curr.next;
+            } else {
+                next = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = next;
+            }
+        }
+
+        head.next = null;
+        return prev;
+    }
+
 }
