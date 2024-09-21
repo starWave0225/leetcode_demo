@@ -434,4 +434,14 @@ public class Hard {
         isScrambleMap.put(s1 + s2, false);
         return false;
     }
+
+    // 214. Shortest Palindrome
+    public String shortestPalindrome(String s) {
+        Utils utils = new Utils();
+        String reverse = new StringBuilder(s).reverse().toString();
+        int[] pi = utils.kmp(reverse, s);
+        return new StringBuilder(s.substring(pi[pi.length-1])).reverse().toString() + s;
+    }
+    
+    
 }

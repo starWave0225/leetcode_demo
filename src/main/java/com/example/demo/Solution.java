@@ -1904,4 +1904,23 @@ public class Solution {
             res.add(Integer.parseInt(expression));
         return res;
     }
+
+    // 516. Longest Palindromic Subsequence
+    public int longestPalindromeSubseq(String s) {
+        int n = s.length();
+        String reverseS = new StringBuilder(s).reverse().toString();
+        int[] dp = new int[n + 1];
+        int[] de = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            for(int j = 1; j <= n; j++){
+                if(s.charAt(i-1) == reverseS.charAt(j-1)){
+                    dp[j] = de[j-1]+1;
+                } else{
+                    dp[j] = Math.max(dp[j-1], de[j]);
+                }
+            }
+            de = Arrays.copyOf(dp, n+1);
+        }
+        return de[n];
+    }
 }
