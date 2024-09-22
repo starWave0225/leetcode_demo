@@ -1941,4 +1941,38 @@ public class Solution {
         }
         return res;
     }
+
+    // 41. First Missing Positive
+    public int firstMissingPositive(int[] nums) {
+        int res = nums.length+1;
+        int n = res-1;
+        boolean[] visited = new boolean[n];
+        for(int i = 0; i < n; i++){
+            if(nums[i] > 0 && nums[i] <= n){
+                visited[nums[i]-1] = true;
+            }
+        }
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                return i+1;
+            }
+        }
+        return res;
+    }
+
+    // 268. Missing Number
+    public int missingNumber(int[] nums) {
+        int res = nums.length;
+        int n = res;
+        boolean[] visited = new boolean[n+1];
+        for(int i = 0; i < n; i++){
+            visited[nums[i]] = true;
+        }
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                return i;
+            }
+        }
+        return res;
+    }
 }
