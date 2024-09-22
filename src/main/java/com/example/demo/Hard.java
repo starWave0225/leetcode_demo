@@ -417,7 +417,7 @@ public class Hard {
             int j = n - i;
             a[s1.charAt(i - 1) - 'a']++;
             b[s2.charAt(i - 1) - 'a']++;
-            c[s2.charAt(j)-'a']++;
+            c[s2.charAt(j) - 'a']++;
             // check if the current substring has the same characters
             if (Arrays.equals(a, b) && isScramble(s1.substring(0, i), s2.substring(0, i))
                     && isScramble(s1.substring(i), s2.substring(i))) {
@@ -425,7 +425,8 @@ public class Hard {
                 isScrambleMap.put(s1 + s2, true);
                 return true;
             }
-            if (Arrays.equals(a, c) && isScramble(s1.substring(0, i), s2.substring(j)) && isScramble(s1.substring(i), s2.substring(0, j))) {
+            if (Arrays.equals(a, c) && isScramble(s1.substring(0, i), s2.substring(j))
+                    && isScramble(s1.substring(i), s2.substring(0, j))) {
                 // if the substrings are scrambled versions of each other, return true
                 isScrambleMap.put(s1 + s2, true);
                 return true;
@@ -440,8 +441,31 @@ public class Hard {
         Utils utils = new Utils();
         String reverse = new StringBuilder(s).reverse().toString();
         int[] pi = utils.kmp(reverse, s);
-        return new StringBuilder(s.substring(pi[pi.length-1])).reverse().toString() + s;
+        return new StringBuilder(s.substring(pi[pi.length - 1])).reverse().toString() + s;
     }
-    
-    
+
+    // 440. K-th Smallest in Lexicographical Order
+    // 前缀树处理
+    public int findKthNumber(int n, int k) {
+        long cur = 1;
+        int i = 1;
+        while (i < k) {
+            long steps = 0;
+            long first = cur;
+            long next = cur + 1;
+            while (first <= n) {
+                steps += Math.min(n + 1, next) - first;
+                first *= 10;
+                next *= 10;
+            }
+            if (steps + i <= k) {
+                cur++;
+                i += steps;
+            } else {
+                cur *= 10;
+                i++;
+            }
+        }
+        return (int) cur;
+    }
 }
