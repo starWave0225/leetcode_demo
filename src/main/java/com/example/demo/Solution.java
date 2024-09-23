@@ -2016,4 +2016,34 @@ public class Solution {
         }
         return dp[s.length()];
     }
+
+    // 140. Word Break II
+    public List<String> wordBreak2(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        for (String str : wordDict) {
+            set.add(str);
+        }
+        List<String> res = new ArrayList<>();
+        wordBreakBfs(0, s, "", set, res);
+        return res;
+    }
+
+    void wordBreakBfs(int index, String s, String word, Set<String> set, List<String> res) {
+        if (s.length() == index) {
+            if (!word.isEmpty()) {
+                res.add(word);
+            }
+            return;
+        }
+        for (int i = index + 1; i <= s.length(); i++) {
+            String temp = s.substring(index, i);
+            if (set.contains(temp)) {
+                if (word.equals(""))
+                    wordBreakBfs(i, s, temp, set, res);
+                else {
+                    wordBreakBfs(i, s, word + " " + temp, set, res);
+                }
+            }
+        }
+    }
 }
