@@ -1944,17 +1944,17 @@ public class Solution {
 
     // 41. First Missing Positive
     public int firstMissingPositive(int[] nums) {
-        int res = nums.length+1;
-        int n = res-1;
+        int res = nums.length + 1;
+        int n = res - 1;
         boolean[] visited = new boolean[n];
-        for(int i = 0; i < n; i++){
-            if(nums[i] > 0 && nums[i] <= n){
-                visited[nums[i]-1] = true;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0 && nums[i] <= n) {
+                visited[nums[i] - 1] = true;
             }
         }
-        for(int i = 0; i < n; i++){
-            if(!visited[i]){
-                return i+1;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                return i + 1;
             }
         }
         return res;
@@ -1964,15 +1964,56 @@ public class Solution {
     public int missingNumber(int[] nums) {
         int res = nums.length;
         int n = res;
-        boolean[] visited = new boolean[n+1];
-        for(int i = 0; i < n; i++){
+        boolean[] visited = new boolean[n + 1];
+        for (int i = 0; i < n; i++) {
             visited[nums[i]] = true;
         }
-        for(int i = 0; i < n; i++){
-            if(!visited[i]){
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
                 return i;
             }
         }
         return res;
+    }
+
+    // 2707. Extra Characters in a String
+    public int minExtraChar(String s, String[] dictionary) {
+        Set<String> set = new HashSet<>();
+        for (String str : dictionary) {
+            set.add(str);
+        }
+        int[] dp = new int[s.length() + 1];
+        for (int i = 0; i < s.length(); i++) {
+            dp[i + 1] = s.length();
+        }
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                String sub = s.substring(j, i);
+                if (set.contains(sub)) {
+                    dp[i] = Math.min(dp[i], dp[j]);
+                }
+            }
+            dp[i] = Math.min(dp[i - 1] + 1, dp[i]);
+        }
+        return dp[s.length()];
+    }
+
+    // 139. Word Break
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        for (String str : wordDict) {
+            set.add(str);
+        }
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                String sub = s.substring(j, i);
+                if (dp[j] && set.contains(sub)) {
+                    dp[i] = dp[j];
+                }
+            }
+        }
+        return dp[s.length()];
     }
 }
