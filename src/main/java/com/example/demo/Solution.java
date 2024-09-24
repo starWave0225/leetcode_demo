@@ -2046,4 +2046,61 @@ public class Solution {
             }
         }
     }
+
+    // 3043. Find the Length of the Longest Common Prefix
+    public int longestCommonPrefix(int[] arr1, int[] arr2) {
+        // int length1 = arr1.length;
+        // Set<String> set = new HashSet<>();
+        // for(int i = 0; i < length1; i++){
+        // String temp = Integer.toString(arr1[i]);
+        // for(int j = 0; j < temp.length(); j++){
+        // String sub = temp.substring(0, j);
+        // set.add(sub);
+        // }
+        // set.add(temp);
+        // }
+        // int length2 = arr2.length;
+        // int res= 0;
+        // for(int i = 0; i < length2; i++){
+        // String temp = Integer.toString(arr2[i]);
+        // if(set.contains(temp)){
+        // res = Math.max(res, temp.length());
+        // continue;
+        // }
+        // for(int j = temp.length()-1; j > 0; j--){
+        // String sub = temp.substring(0, j);
+        // if(set.contains(sub)){
+        // res = Math.max(res, j);
+        // break;
+        // }
+        // }
+        // }
+        // return res;
+        Trie root = new Trie(10);
+        for (int val : arr1) {
+            Trie curr = root;
+            for (char ch : String.valueOf(val).toCharArray()) {
+                if (curr.children[ch - '0'] == null) {
+                    curr.children[ch - '0'] = new Trie();
+                }
+                curr = curr.children[ch - '0'];
+            }
+        }
+
+        int currCount = 0;
+        int ans = 0;
+        for (int val : arr2) {
+            Trie curr = root;
+            for (char ch : String.valueOf(val).toCharArray()) {
+                if (curr.children[ch - '0'] == null) {
+                    break;
+                }
+                currCount++;
+                curr = curr.children[ch - '0'];
+            }
+            ans = Math.max(ans, currCount);
+            currCount = 0;
+        }
+        return ans;
+    }
 }
