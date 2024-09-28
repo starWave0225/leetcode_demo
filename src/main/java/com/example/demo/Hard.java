@@ -468,4 +468,31 @@ public class Hard {
         }
         return (int) cur;
     }
+
+    // 2416. Sum of Prefix Scores of Strings
+    public int[] sumPrefixScores(String[] words) {
+        int len = words.length;
+        int[] res = new int[len];
+        Trie trie = new Trie();
+        for (String word : words) {
+            Trie p = trie;
+            for (char ch : word.toCharArray()) {
+                if (p.children[ch - 'a'] == null) {
+                    p.children[ch - 'a'] = new Trie();
+                }
+                p.children[ch - 'a'].score++;
+                p = p.children[ch - 'a'];
+            }
+        }
+        for (int i = 0; i < len; i++) {
+            Trie p = trie;
+            int count = 0;
+            for (char ch : words[i].toCharArray()) {
+                count += p.children[ch - 'a'].score;
+                p = p.children[ch - 'a'];
+            }
+            res[i] = count;
+        }
+        return res;
+    }
 }
