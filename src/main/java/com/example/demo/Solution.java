@@ -2103,4 +2103,63 @@ public class Solution {
         }
         return ans;
     }
+
+    // 1497. Check If Array Pairs Are Divisible by k
+    public boolean canArrange(int[] arr, int k) {
+        int len = arr.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < len; i++) {
+            arr[i] %= k;
+            if (arr[i] < 0)
+                arr[i] += k;
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+        for (int i : map.keySet()) {
+            if (i == 0) {
+                if (i % 2 == 1) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+            int iv = map.get(i);
+            int riv = map.getOrDefault(k - i, 0);
+            if (i == k - i) {
+                if (iv % 2 == 1) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+            if (iv != riv) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 1331. Rank Transform of an Array
+    public int[] arrayRankTransform(int[] arr) {
+        int[] newArr = arr.clone();
+        Arrays.sort(newArr);
+        int count = 1;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < arr.length; i++){
+            while(i < arr.length-1 && newArr[i] == newArr[i+1]){
+                i++;
+            }
+            if(i == arr.length-1){
+                map.put(newArr[i], count);
+            }
+            else{
+                map.put(newArr[i], count);
+                count++;
+            }
+        }
+        int[] res = new int[arr.length];
+        for(int i = 0; i < arr.length; i++){
+            res[i] = map.get(arr[i]);
+        }
+        return res;
+    }
 }
