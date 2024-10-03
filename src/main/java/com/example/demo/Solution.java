@@ -2144,22 +2144,65 @@ public class Solution {
         Arrays.sort(newArr);
         int count = 1;
         Map<Integer, Integer> map = new HashMap<>();
-        for(int i = 0; i < arr.length; i++){
-            while(i < arr.length-1 && newArr[i] == newArr[i+1]){
+        for (int i = 0; i < arr.length; i++) {
+            while (i < arr.length - 1 && newArr[i] == newArr[i + 1]) {
                 i++;
             }
-            if(i == arr.length-1){
+            if (i == arr.length - 1) {
                 map.put(newArr[i], count);
-            }
-            else{
+            } else {
                 map.put(newArr[i], count);
                 count++;
             }
         }
         int[] res = new int[arr.length];
-        for(int i = 0; i < arr.length; i++){
+        for (int i = 0; i < arr.length; i++) {
             res[i] = map.get(arr[i]);
         }
         return res;
+    }
+
+    // 1590. Make Sum Divisible by P
+    public int minSubarray(int[] nums, int p) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        // 计算整个数组模p的和
+        for (int i = 0; i < nums.length; i++) {
+            int temp = nums[i] % p;
+            nums[i] = temp;
+            sum += temp;
+            sum %= p;
+        }
+        System.out.println("数组对p取模之后的和: " + sum);
+        System.out.println("数组取模后的结果: " + Arrays.toString(nums));
+        
+        // 如果sum为0，表示数组本身已经满足条件
+        if (sum == 0) {
+            return 0;
+        }
+    
+        // 先将前缀和0对应的下标放入map
+        map.put(0, -1);
+        
+        int presum = 0; // 前缀和
+        int res = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            presum += nums[i];
+            presum %= p;
+            // 保证target为正
+            int target = (presum - sum + p) % p; // 寻找目标值
+            
+            System.out.println("当前下标: " + i + ", 前缀和: " + presum + ", 目标值: " + target);
+            
+            if (map.containsKey(target)) {
+                res = Math.min(res, i - map.get(target));
+                System.out.println("找到符合条件的子数组，当前最小长度: " + res);
+            }
+            map.put(presum, i); // 更新哈希表
+            System.out.println("当前哈希表内容: " + map);
+        }
+        
+        // 返回结果
+        return res == Integer.MAX_VALUE || res == nums.length ? -1 : res;
     }
 }
