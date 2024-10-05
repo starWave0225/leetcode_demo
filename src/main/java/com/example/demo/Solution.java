@@ -2175,15 +2175,15 @@ public class Solution {
         }
         System.out.println("数组对p取模之后的和: " + sum);
         System.out.println("数组取模后的结果: " + Arrays.toString(nums));
-        
+
         // 如果sum为0，表示数组本身已经满足条件
         if (sum == 0) {
             return 0;
         }
-    
+
         // 先将前缀和0对应的下标放入map
         map.put(0, -1);
-        
+
         int presum = 0; // 前缀和
         int res = Integer.MAX_VALUE;
         for (int i = 0; i < nums.length; i++) {
@@ -2191,9 +2191,9 @@ public class Solution {
             presum %= p;
             // 保证target为正
             int target = (presum - sum + p) % p; // 寻找目标值
-            
+
             System.out.println("当前下标: " + i + ", 前缀和: " + presum + ", 目标值: " + target);
-            
+
             if (map.containsKey(target)) {
                 res = Math.min(res, i - map.get(target));
                 System.out.println("找到符合条件的子数组，当前最小长度: " + res);
@@ -2201,8 +2201,76 @@ public class Solution {
             map.put(presum, i); // 更新哈希表
             System.out.println("当前哈希表内容: " + map);
         }
-        
+
         // 返回结果
         return res == Integer.MAX_VALUE || res == nums.length ? -1 : res;
+    }
+
+    // 2491. Divide Players Into Teams of Equal Skill
+    public long dividePlayers(int[] skill) {
+        long len = skill.length;
+        long sum = 0;
+        for (int num : skill) {
+            sum += num;
+        }
+        long subsum = sum / (len / 2);
+        boolean flag = true;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : skill) {
+            if (num > subsum) {
+                return -1;
+            }
+            num %= subsum;
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        long res = 0;
+        List<Integer> visited = new ArrayList<>();
+        for (int key : map.keySet()) {
+            if (visited.contains(key)) {
+                continue;
+            }
+            int value = map.get(key);
+            if (key * 2 == subsum) {
+                if (value % 2 != 0) {
+                    flag = false;
+                    break;
+                } else {
+                    res += (long) value * (long) key * (long) key / 2;
+                    continue;
+                }
+            }
+            int left = (int) subsum - key;
+            if (map.getOrDefault(left, 0) == value) {
+                res += (long) value * (long) left * (long) key;
+                visited.add(left);
+            } else {
+                flag = false;
+                break;
+            }
+        }
+        if (!flag) {
+            return -1;
+        }
+        return res;
+    }
+
+    // 567. Permutation in String
+    public boolean checkInclusion(String s1, String s2) {
+        int l1 = s1.length(), l2 = s2.length();
+        int[] array1 = new int[26];
+        for (char ch : s1.toCharArray()) {
+            array1[ch - 'a']++;
+        }
+        int[] array2 = new int[26];
+        for (int i = 0; i < l2; i++) {
+            array2[s2.charAt(i)-'a']++;
+            if(i >= l1){
+                array2[s2.charAt(i-l1)-'a']--;
+            }
+            if(Arrays.equals(array1, array2)){
+                return true;
+            }
+        }
+        return false;
     }
 }
