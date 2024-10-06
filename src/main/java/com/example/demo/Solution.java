@@ -2293,4 +2293,21 @@ public class Solution {
         }
         return start + end >= n2;
     }
+
+    // 2554. Maximum Number of Integers to Choose From a Range I
+    public int maxCount(int[] banned, int n, int maxSum) {
+        HashSet<Integer> set = new HashSet<>();
+        for(int i : banned) {
+            set.add(i);
+        }
+        int sum = 0;
+        int count = 0;
+        for(int i = 1; i <= n; i++) {
+            if(!set.contains(i)) {
+                sum += i;
+                if (sum <= maxSum) count++; else break;
+            }
+        }
+        return count;
+    }
 }
