@@ -2326,4 +2326,10 @@ public class Solution {
         }
         return true;
     }
+
+    // 2696. Minimum String Length After Removing Substrings
+    public int minLength(String s) {
+        
+    }
+
 }
