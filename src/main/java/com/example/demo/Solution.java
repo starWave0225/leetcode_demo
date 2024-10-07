@@ -2263,11 +2263,11 @@ public class Solution {
         }
         int[] array2 = new int[26];
         for (int i = 0; i < l2; i++) {
-            array2[s2.charAt(i)-'a']++;
-            if(i >= l1){
-                array2[s2.charAt(i-l1)-'a']--;
+            array2[s2.charAt(i) - 'a']++;
+            if (i >= l1) {
+                array2[s2.charAt(i - l1) - 'a']--;
             }
-            if(Arrays.equals(array1, array2)){
+            if (Arrays.equals(array1, array2)) {
                 return true;
             }
         }
@@ -2278,17 +2278,17 @@ public class Solution {
     public boolean areSentencesSimilar(String sentence1, String sentence2) {
         String[] s1 = sentence1.split(" ");
         String[] s2 = sentence2.split(" ");
-        if(s1.length < s2.length){
+        if (s1.length < s2.length) {
             String[] temp = s1;
             s1 = s2;
             s2 = temp;
         }
         int start = 0, end = 0;
         int n1 = s1.length, n2 = s2.length;
-        while(start < n2 && s1[start].equals(s2[start])){
+        while (start < n2 && s1[start].equals(s2[start])) {
             start++;
         }
-        while(end < n2 && s1[n1-end-1].equals(s2[n2-end-1])){
+        while (end < n2 && s1[n1 - end - 1].equals(s2[n2 - end - 1])) {
             end++;
         }
         return start + end >= n2;
@@ -2297,17 +2297,33 @@ public class Solution {
     // 2554. Maximum Number of Integers to Choose From a Range I
     public int maxCount(int[] banned, int n, int maxSum) {
         HashSet<Integer> set = new HashSet<>();
-        for(int i : banned) {
+        for (int i : banned) {
             set.add(i);
         }
         int sum = 0;
         int count = 0;
-        for(int i = 1; i <= n; i++) {
-            if(!set.contains(i)) {
+        for (int i = 1; i <= n; i++) {
+            if (!set.contains(i)) {
                 sum += i;
-                if (sum <= maxSum) count++; else break;
+                if (sum <= maxSum)
+                    count++;
+                else
+                    break;
             }
         }
         return count;
+    }
+
+    // 2490. Circular Sentence
+    public boolean isCircularSentence(String sentence) {
+        String[] words = sentence.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            String cur = words[i];
+            String next = words[1 + i == words.length ? 0 : i + 1];
+            if (cur.charAt(cur.length() - 1) != next.charAt(0)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
