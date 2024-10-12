@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -2401,5 +2402,40 @@ public class Solution {
         }
 
         return maxWidth;
+    }
+
+    // 1942. The Number of the Smallest Unoccupied Chair
+    public int smallestChair(int[][] times, int targetFriend) {
+        int[] targetT = times[targetFriend];
+        int n = times.length;
+        Arrays.sort(times, (a, b) -> {
+            return a[0]-b[0];
+        });
+        PriorityQueue<Integer> emptySeats = new PriorityQueue<>();
+        PriorityQueue<int[]> takenSeats = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        for (int i = 0; i < n; i++) {
+            emptySeats.add(i);
+        }
+        for (int[] time : times) {
+            int arrive = time[0];
+            int left = time[1];
+            
+            // Free chairs that are vacated before the current arrival time
+            while (!takenSeats.isEmpty() && takenSeats.peek()[0] <= arrive) {
+                emptySeats.add(takenSeats.poll()[1]);
+            }
+            
+            // Assign the smallest available chair
+            int chair = emptySeats.poll();
+            
+            // If this is the target friend, return their chair number
+            if (arrive == targetT[0]) {
+                return chair;
+            }
+            
+            // Mark the chair as being used until the friend's leave time
+            takenSeats.add(new int[]{left, chair});
+        }   
+        return -1;
     }
 }
