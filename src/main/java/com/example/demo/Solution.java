@@ -2409,7 +2409,7 @@ public class Solution {
         int[] targetT = times[targetFriend];
         int n = times.length;
         Arrays.sort(times, (a, b) -> {
-            return a[0]-b[0];
+            return a[0] - b[0];
         });
         PriorityQueue<Integer> emptySeats = new PriorityQueue<>();
         PriorityQueue<int[]> takenSeats = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
@@ -2419,23 +2419,96 @@ public class Solution {
         for (int[] time : times) {
             int arrive = time[0];
             int left = time[1];
-            
+
             // Free chairs that are vacated before the current arrival time
             while (!takenSeats.isEmpty() && takenSeats.peek()[0] <= arrive) {
                 emptySeats.add(takenSeats.poll()[1]);
             }
-            
+
             // Assign the smallest available chair
             int chair = emptySeats.poll();
-            
+
             // If this is the target friend, return their chair number
             if (arrive == targetT[0]) {
                 return chair;
             }
-            
+
             // Mark the chair as being used until the friend's leave time
-            takenSeats.add(new int[]{left, chair});
-        }   
+            takenSeats.add(new int[] { left, chair });
+        }
         return -1;
+    }
+
+    // 2406. Divide Intervals Into Minimum Number of Groups
+    public int minGroups(int[][] intervals) {
+        int[] starts=new int[intervals.length];
+        int[] ends=new int[intervals.length];
+        for (int i = 0; i < intervals.length; i++) {
+            starts[i] = intervals[i][0];
+            ends[i] = intervals[i][1];
+        }
+
+        // Sort start and end times
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+
+        int res = 0;
+        int end = 0;
+        for(int i=0;i<intervals.length;i++){
+            if(starts[i]>ends[end]){
+                end++;
+            }
+            else{
+                res++;
+            }
+        }
+        return res;
+    }
+
+    // 632. Smallest Range Covering Elements from K Lists
+    public int[] smallestRange(List<List<Integer>> nums) {
+        // Min-Heap: stores (value, list index, element index)
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        int curMax = Integer.MIN_VALUE;
+
+        // Initialize the heap with the first element of each list
+        for (int i = 0; i < nums.size(); i++) {
+            List<Integer> temp = nums.get(i);
+            minHeap.offer(new int[]{temp.get(0), i, 0});
+            curMax = Math.max(curMax, temp.get(0));
+        }
+
+        // Track the smallest range
+        int[] smallRange = new int[]{0, Integer.MAX_VALUE};
+
+        while (true) {
+            // Get the minimum element from the heap
+            int[] curr = minHeap.poll();
+            int curMin = curr[0], listIdx = curr[1], elemIdx = curr[2];
+
+            // Update the smallest range if a better one is found
+            if ((curMax - curMin < smallRange[1] - smallRange[0]) ||
+                (curMax - curMin == smallRange[1] - smallRange[0] && curMin < smallRange[0])) {
+                smallRange[0] = curMin;
+                smallRange[1] = curMax;
+            }
+
+            // Move to the next element in the same list
+            if (elemIdx < nums.get(listIdx).size() - 1) {
+                elemIdx++;
+                int nextVal = nums.get(listIdx).get(elemIdx);
+                minHeap.offer(new int[]{nextVal, listIdx, elemIdx});
+                curMax = Math.max(curMax, nextVal);
+            } else {
+                // If any list is exhausted, stop
+                break;
+            }
+        }
+        return smallRange;
+    }
+
+    // 2530. Maximal Score After Applying K Operations
+    public long maxKelements(int[] nums, int k) {
+        
     }
 }
