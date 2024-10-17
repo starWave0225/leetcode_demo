@@ -2509,6 +2509,34 @@ public class Solution {
 
     // 2530. Maximal Score After Applying K Operations
     public long maxKelements(int[] nums, int k) {
-        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b)->b-a);
+        for(int num : nums){
+            pq.add(num);
+        }
+        long res = 0;
+        while(!pq.isEmpty() && k > 0){
+            int count = pq.poll();
+            res += count;
+            pq.add((int)Math.ceil(count/3.0));
+            k--;
+        }
+        return res;
+    }
+
+    // 2938. Separate Black and White Balls
+    public long minimumSteps(String s) {
+        char[] chs = s.toCharArray();
+        int n = chs.length;
+        long res=0;
+        int black = 0;
+        for(int i = 0; i < n; i++){
+            if(chs[i] == '1'){
+                black++;
+            }
+            else{
+                res += black;
+            }
+        }
+        return res;
     }
 }
