@@ -8,15 +8,16 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Logger;
 
-
 public class Solution {
+
     Logger logger = Logger.getLogger(getClass().getName());
-    int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     public void log(String sth) {
         logger.info(sth);
@@ -66,8 +67,9 @@ public class Solution {
 
     // 129. Sum Root to Leaf Numbers
     private int sumNumbersDfs(TreeNode node, int sum) {
-        if (node == null)
+        if (node == null) {
             return 0;
+        }
         sum *= 10;
         sum += node.val;
         if (node.left == null && node.right == null) {
@@ -100,8 +102,9 @@ public class Solution {
     // 623. Add One Row to Tree
     private void addOneRowDfs(TreeNode root, int depth, int aim, int val) {
 
-        if (root == null)
+        if (root == null) {
             return;
+        }
         if (depth == aim - 1) {
             TreeNode leftNode = root.left;
             TreeNode rightNode = root.right;
@@ -140,8 +143,9 @@ public class Solution {
 
     // 988. Smallest String Starting From Leaf
     public void smallestFromLeafDfs(TreeNode node, StringBuilder res, StringBuilder path) {
-        if (node == null)
+        if (node == null) {
             return;
+        }
         char temp = (char) ('a' + node.val);
         path.insert(0, temp);
         if (node.left == null && node.right == null) {
@@ -283,7 +287,7 @@ public class Solution {
     // 1992. Find All Groups of Farmland
     private int[] findFarmlandDfs(int[][] land, Set<Integer> set, int i, int j) {
         Stack<int[]> stack = new Stack<>();
-        stack.push(new int[] { i, j });
+        stack.push(new int[]{i, j});
         set.add(i * 1000 + j);
         int minX = i, minY = j, maxX = i, maxY = j;
         while (!stack.isEmpty()) {
@@ -294,7 +298,7 @@ public class Solution {
                 if (nx >= 0 && nx < land.length && ny >= 0 && ny < land[0].length
                         && land[nx][ny] == 1 && !set.contains(nx * 1000 + ny)) {
                     set.add(nx * 1000 + ny);
-                    stack.push(new int[] { nx, ny });
+                    stack.push(new int[]{nx, ny});
                     minX = Math.min(minX, nx);
                     minY = Math.min(minY, ny);
                     maxX = Math.max(maxX, nx);
@@ -302,7 +306,7 @@ public class Solution {
                 }
             }
         }
-        return new int[] { minX, minY, maxX, maxY };
+        return new int[]{minX, minY, maxX, maxY};
     }
 
     public int[][] findFarmland(int[][] land) {
@@ -360,8 +364,9 @@ public class Solution {
     // 5. Longest Palindromic Substring
     public String longestPalindrome(String s) {
         int len = s.length();
-        if (len < 2)
+        if (len < 2) {
             return s;
+        }
         int max = 0;
         String res = "";
         boolean[][] canCut = new boolean[len][len];
@@ -443,15 +448,15 @@ public class Solution {
     // 1391. Check if There is a Valid Path in a Grid
     public boolean hasValidPath(int[][] grid) {
         int[][][] dirs = {
-                { { 0, -1 }, { 0, 1 } },
-                { { -1, 0 }, { 1, 0 } },
-                { { 0, -1 }, { 1, 0 } },
-                { { 0, 1 }, { 1, 0 } },
-                { { 0, -1 }, { -1, 0 } },
-                { { 0, 1 }, { -1, 0 } }
+            {{0, -1}, {0, 1}},
+            {{-1, 0}, {1, 0}},
+            {{0, -1}, {1, 0}},
+            {{0, 1}, {1, 0}},
+            {{0, -1}, {-1, 0}},
+            {{0, 1}, {-1, 0}}
         };
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[] { 0, 0 });
+        queue.offer(new int[]{0, 0});
         int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
         visited[0][0] = true;
@@ -464,7 +469,7 @@ public class Solution {
                     for (int[] dir2 : dirs[grid[newi][newj] - 1]) {
                         if (newi + dir2[0] == i && newj + dir2[1] == j) {
                             visited[newi][newj] = true;
-                            queue.offer(new int[] { newi, newj });
+                            queue.offer(new int[]{newi, newj});
                         }
                     }
                 }
@@ -572,7 +577,7 @@ public class Solution {
 
     // 874. Walking Robot Simulation
     public int robotSim(int[] commands, int[][] obstacles) {
-        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
         int res = 0;
         int x = 0, y = 0, dir = 0;
         for (int command : commands) {
@@ -606,8 +611,9 @@ public class Solution {
 
     // 633. Sum of Square Numbers
     public boolean judgeSquareSum(int c) {
-        if (c == 0)
+        if (c == 0) {
             return true;
+        }
         int i = 0, j = (int) Math.sqrt(c);
         if (c / j == j && c % j == 0) {
             return true;
@@ -633,8 +639,8 @@ public class Solution {
         while (x != 0) {
             int temp = x % 10;
             x /= 10;
-            if (Math.abs(x) == 0 && ((res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && temp > 7)) ||
-                    (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && temp < -8)))) {
+            if (Math.abs(x) == 0 && ((res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && temp > 7))
+                    || (res < Integer.MIN_VALUE / 10 || (res == Integer.MIN_VALUE / 10 && temp < -8)))) {
                 return 0;
             }
 
@@ -768,8 +774,9 @@ public class Solution {
     }
 
     boolean isValidBSTDFS(TreeNode root, long min, long max) {
-        if (root == null)
+        if (root == null) {
             return true;
+        }
         if (root.val <= min || root.val >= max) {
             return false;
         } else {
@@ -793,8 +800,9 @@ public class Solution {
     // 456. 132 Pattern
     public boolean find132pattern(int[] nums) {
         int len = nums.length;
-        if (len < 3)
+        if (len < 3) {
             return false;
+        }
         int min = Integer.MIN_VALUE;
         // stack记录第二大数字值的堆栈，min记录第二大数字值
         Stack<Integer> stack = new Stack<>();
@@ -897,7 +905,7 @@ public class Solution {
         int newI = 0;
         int newJ = 0;
         int dir = 0;
-        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
         visited[0][0] = true;
         res[0][0] = cur.val;
         cur = cur.next;
@@ -922,8 +930,9 @@ public class Solution {
 
     // 310. Minimum Height Trees
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
-        if (n == 1)
+        if (n == 1) {
             return new ArrayList<Integer>(List.of(0));
+        }
         HashMap<Integer, List<Integer>> map = new HashMap<>();
         for (int[] edge : edges) {
             List l0 = map.getOrDefault(edge[0], new ArrayList<Integer>());
@@ -1003,8 +1012,9 @@ public class Solution {
     }
 
     public void minDiffInBSTHelper(TreeNode root, List<Integer> res) {
-        if (root == null)
+        if (root == null) {
             return;
+        }
         res.add(root.val);
         minDiffInBSTHelper(root.left, res);
         minDiffInBSTHelper(root.right, res);
@@ -1036,8 +1046,9 @@ public class Solution {
     int bstToGstRes = 0;
 
     public TreeNode bstToGst(TreeNode root) {
-        if (root == null)
+        if (root == null) {
             return root;
+        }
         bstToGst(root.right);
         bstToGstRes += root.val;
         root.val = bstToGstRes;
@@ -1167,13 +1178,15 @@ public class Solution {
         for (String str : words) {
             boolean flag = true;
             for (int i = 0; i < str.length(); i++) {
-                if (ch[str.charAt(i) - 'a'])
+                if (ch[str.charAt(i) - 'a']) {
                     continue;
+                }
                 flag = false;
                 break;
             }
-            if (flag)
+            if (flag) {
                 res++;
+            }
         }
         return res;
     }
@@ -1201,10 +1214,12 @@ public class Solution {
 
     // 650. 2 Keys Keyboard, 问的是最少步数
     public int minSteps(int n) {
-        if (n == 1)
+        if (n == 1) {
             return 0;
-        if (n == 2)
+        }
+        if (n == 2) {
             return 2;
+        }
 
         int steps = 0;
         int factor = 2;
@@ -1300,8 +1315,9 @@ public class Solution {
             p1 = p1.next;
             p2 = p2.next;
         }
-        if (p1.next == null)
+        if (p1.next == null) {
             return dummyhead;
+        }
         p1.next = p1.next.next;
         return dummyhead.next;
     }
@@ -1321,8 +1337,9 @@ public class Solution {
             p1.next = next;
             pre = p1;
             p1 = next;
-            if (p1 == null)
+            if (p1 == null) {
                 break;
+            }
             p2 = next.next;
         }
         return dummyhead.next;
@@ -1390,10 +1407,12 @@ public class Solution {
     // 29. Divide Two Integers
     public int divide(int dividend, int divisor) {
         long sign = 1;
-        if (divisor == 1)
+        if (divisor == 1) {
             return dividend;
-        if ((dividend < 0 && divisor >= 0) || (dividend >= 0 && divisor < 0))
+        }
+        if ((dividend < 0 && divisor >= 0) || (dividend >= 0 && divisor < 0)) {
             sign = -1;
+        }
         long cur = 0;
         long dividendLong = Math.abs(dividend);
         long divisorLong = Math.abs(divisor);
@@ -1504,8 +1523,9 @@ public class Solution {
             sum += temp % 10;
             temp /= 10;
         }
-        if (x % sum == 0)
+        if (x % sum == 0) {
             return sum;
+        }
         return -1;
     }
 
@@ -1523,8 +1543,9 @@ public class Solution {
                 }
             }
         }
-        if (min > n)
+        if (min > n) {
             return -1;
+        }
         return min;
     }
 
@@ -1544,8 +1565,9 @@ public class Solution {
         for (int j = 0; j < n - 1; j++) {
             int diff = times[j + 1] - times[j];
             res = Math.min(res, diff);
-            if (res == 0)
+            if (res == 0) {
                 return 0;
+            }
         }
         int diff = 24 * 60 - times[n - 1] + times[0];
         res = Math.min(res, diff);
@@ -1574,19 +1596,19 @@ public class Solution {
             }
         }
         List<String> res = new ArrayList<>();
-        for(String str : set){
-            if(mulSet.contains(str)){
+        for (String str : set) {
+            if (mulSet.contains(str)) {
                 continue;
             }
-            if(!set2.contains(str)){
+            if (!set2.contains(str)) {
                 res.add(str);
             }
         }
-        for(String str : set2){
-            if(mulSet.contains(str)){
+        for (String str : set2) {
+            if (mulSet.contains(str)) {
                 continue;
             }
-            if(!set.contains(str)){
+            if (!set.contains(str)) {
                 res.add(str);
             }
         }
@@ -1638,16 +1660,15 @@ public class Solution {
     public String simplifyPath(String path) {
         Stack<String> stack = new Stack<>();
         String[] files = path.split("/");
-        List<String> list = Arrays.asList("",".","..");
-        for(String file:files){
-            if(!stack.isEmpty() && file.equals("..")){
+        List<String> list = Arrays.asList("", ".", "..");
+        for (String file : files) {
+            if (!stack.isEmpty() && file.equals("..")) {
                 stack.pop();
-            }
-            else if(!list.contains(file)){
+            } else if (!list.contains(file)) {
                 stack.add(file);
             }
         }
-        return "/"+String.join("/", stack);
+        return "/" + String.join("/", stack);
     }
 
     // 103. Binary Tree Zigzag Level Order Traversal
@@ -1655,24 +1676,24 @@ public class Solution {
         Queue<TreeNode> queue = new LinkedList<>();
         List<List<Integer>> res = new ArrayList<>();
         queue.add(root);
-        if(root == null){
+        if (root == null) {
             return res;
         }
         int level = 0;
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int curLength = queue.size();
             List<Integer> temp = new ArrayList<>();
-            for(int i = 0; i < curLength; i++){
+            for (int i = 0; i < curLength; i++) {
                 TreeNode node = queue.poll();
                 temp.add(node.val);
-                if(node.left != null){
+                if (node.left != null) {
                     queue.add(node.left);
                 }
-                if(node.right != null){
+                if (node.right != null) {
                     queue.add(node.right);
                 }
             }
-            if(level % 2 == 1){
+            if (level % 2 == 1) {
                 Collections.reverse(temp);
             }
             res.add(temp);
@@ -1689,12 +1710,11 @@ public class Solution {
         ListNode greater = new ListNode();
         ListNode greaterHead = greater;
         greaterHead.next = greater;
-        while(p!=null){
-            if(p.val < x){
+        while (p != null) {
+            if (p.val < x) {
                 less.next = p;
                 less = p;
-            }
-            else{
+            } else {
                 greater.next = p;
                 greater = p;
             }
@@ -1707,14 +1727,18 @@ public class Solution {
 
     // 96. Unique Binary Search Trees
     public int numTrees(int n) {
-        if(n == 0) return 1;
-        if(n == 1) return 1;
-        int[] nums = new int[n+1];
+        if (n == 0) {
+            return 1;
+        }
+        if (n == 1) {
+            return 1;
+        }
+        int[] nums = new int[n + 1];
         nums[0] = 1;
         nums[1] = 1;
-        for(int i =2;i<=n;i++){
-            for(int j=1; j<=i; ++j) {
-                nums[i] += nums[j-1] * nums[i-j];
+        for (int i = 2; i <= n; i++) {
+            for (int j = 1; j <= i; ++j) {
+                nums[i] += nums[j - 1] * nums[i - j];
             }
         }
         return nums[n];
@@ -1722,25 +1746,29 @@ public class Solution {
 
     // 61. Rotate List
     public ListNode rotateRight(ListNode head, int k) {
-        if(k == 0 || head == null || head.next==null) return head;
+        if (k == 0 || head == null || head.next == null) {
+            return head;
+        }
         ListNode p = head;
         int l = 0;
-        while(p!=null){
+        while (p != null) {
             l++;
             p = p.next;
         }
         k %= l;
-        if(k == 0) return head;
+        if (k == 0) {
+            return head;
+        }
         ListNode p1 = new ListNode();
         p1.next = head;
         ListNode p2 = new ListNode();
         l = 0;
-        while(l < k){
+        while (l < k) {
             p1 = p1.next;
             l++;
         }
         p2.next = head;
-        while(p1.next != null){
+        while (p1.next != null) {
             p2 = p2.next;
             p1 = p1.next;
         }
@@ -1752,15 +1780,62 @@ public class Solution {
 
     // 137. Single Number II
     public int singleNumber(int[] nums) {
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for(int num : nums){
-            map.put(num, map.getOrDefault(num, 0)+1);
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
-        for(int num : map.keySet()){
-            if(map.get(num)==1){
+        for (int num : map.keySet()) {
+            if (map.get(num) == 1) {
                 return num;
             }
         }
         return -1;
+    }
+
+    // 2583. Kth Largest Sum in a Binary Tree
+    public long kthLargestLevelSum(TreeNode root, int k) {
+        PriorityQueue<Long> pq = new PriorityQueue<>();
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+            long temp = 0;
+            while (len > 0) {
+                TreeNode cur = queue.poll();
+                temp += cur.val;
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+                len--;
+
+            }
+            pq.add(temp);
+            if (pq.size() > k) {
+                pq.poll();
+            }
+        }
+        return pq.peek();
+    }
+
+    public char findKthBit(int n, int k) {
+        if (n == 1) {
+            return '0';
+        }
+        int len = (int) Math.pow(2, n) - 1;
+        int half = len / 2;
+        if (half == k - 1) {
+            return '1';
+        } else if (k <= half) {
+            return findKthBit(n - 1, k);
+        } else {
+            char temp = findKthBit(n - 1, len - k + 1);
+            if (temp == '0') {
+                return '1';
+            }
+            return '0';
+        }
     }
 }

@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.print.DocFlavor.STRING;
 
 public class Hard {
+
     // 1605. Find Valid Matrix Given Row and Column Sums
     public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
         // int m = rowSum.length, n = colSum.length;
@@ -300,7 +302,7 @@ public class Hard {
         queue.add(start);
         boolean[][] visited = new boolean[m][n];
         visited[start[0]][start[1]] = true;
-        int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
             int p = grid[cur[0]][cur[1]];
@@ -317,7 +319,7 @@ public class Hard {
                     continue;
                 }
                 visited[ni][nj] = true;
-                queue.add(new int[] { ni, nj });
+                queue.add(new int[]{ni, nj});
                 steps[ni][nj] = steps[cur[0]][cur[1]] + 1;
             }
         }
@@ -383,7 +385,7 @@ public class Hard {
                 curN++;
             }
         }
-        if(next != null){
+        if (next != null) {
             p2.next = next;
         }
         return dummyhead.next;
@@ -401,6 +403,49 @@ public class Hard {
         return pre;
     }
 
-    // 87. Scramble String
-    
+    // 1106. Parsing A Boolean Expression
+    public boolean parseBoolExpr(String expression) {
+        Stack<Character> st = new Stack<>();
+        char[] chs = expression.toCharArray();
+        for (char ch : chs) {
+            if (ch == ',' || ch == '(') {
+                continue;
+            }
+            if (ch == 't'
+                    || ch == 'f'
+                    || ch == '!'
+                    || ch == '&'
+                    || ch == '|') {
+                st.push(ch);
+            } else if (ch == ')') {
+                boolean hasTrue = false, hasFalse = false;
+                while (st.peek() == 't' || st.peek() == 'f') {
+                    char cur = st.pop();
+                    switch (cur) {
+                        case 't':
+                            hasTrue = true;
+                            break;
+                        case 'f':
+                            hasFalse = true;
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+                }
+                char cur = st.pop();
+                switch (cur) {
+                    case '!':
+                        st.push(hasTrue ? 'f' : 't');
+                        break;
+                    case '&':
+                        st.push(hasFalse ? 'f' : 't');
+                        break;
+                    default:
+                        st.push(hasTrue ? 't' : 'f');
+                        break;
+                }
+            }
+        }
+        return st.peek() == 't';
+    }
 }
