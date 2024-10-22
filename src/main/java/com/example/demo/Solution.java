@@ -3,6 +3,7 @@ package com.example.demo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1746,9 +1747,8 @@ public class Solution {
 
     // 61. Rotate List
     public ListNode rotateRight(ListNode head, int k) {
-        if (k == 0 || head == null || head.next == null) {
+        if (k == 0 || head == null || head.next == null)
             return head;
-        }
         ListNode p = head;
         int l = 0;
         while (p != null) {
@@ -1756,9 +1756,8 @@ public class Solution {
             p = p.next;
         }
         k %= l;
-        if (k == 0) {
+        if (k == 0)
             return head;
-        }
         ListNode p1 = new ListNode();
         p1.next = head;
         ListNode p2 = new ListNode();
@@ -1837,5 +1836,777 @@ public class Solution {
             }
             return '0';
         }
+
+      // 48. Rotate Image
+    public void rotate(int[][] matrix) {
+        int n = matrix.length;
+        int t = 0, b = n - 1;
+        while (t < b) {
+            for (int i = 0; i < n; i++) {
+                int temp = matrix[t][i];
+                matrix[t][i] = matrix[b][i];
+                matrix[b][i] = temp;
+            }
+            t++;
+            b--;
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+    }
+
+    // 179. Largest Number
+    public String largestNumber(int[] nums) {
+        int n = nums.length;
+        Integer[] numsInt = new Integer[n];
+        boolean flag = true;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != 0) {
+                flag = false;
+            }
+            numsInt[i] = nums[i]; // Auto-boxing
+        }
+        if (flag)
+            return "0";
+        Arrays.sort(numsInt, (a, b) -> {
+            String stra = a.toString();
+            String strb = b.toString();
+            return (stra + strb).compareTo(strb + stra);
+        });
+        StringBuilder res = new StringBuilder();
+        for (int k = n - 1; k >= 0; k--) {
+            res.append(numsInt[k]);
+        }
+        return res.toString();
+    }
+
+    // 2487. Remove Nodes From Linked List
+    public ListNode removeNodes(ListNode head) {
+        // List<Integer> list = new ArrayList<>();
+        // ListNode p = head;
+        // while (p != null) {
+        // list.add(p.val);
+        // p = p.next;
+        // }
+        // int max = list.get(list.size() - 1);
+        // List<Integer> list2 = new ArrayList<>();
+        // for (int i = list.size() - 2; i >= 0; i--) {
+        // if (max <= list.get(i)) {
+        // max = list.get(i);
+        // } else {
+        // list2.add(0, list.get(i));
+        // }
+        // }
+        // int i = 0;
+        // ListNode dummyHead = new ListNode();
+        // p = dummyHead;
+        // ListNode cur = head;
+        // while (i < list2.size()) {
+        // if(cur.val != list2.get(i)){
+        // p.next = cur;
+        // p = p.next;
+        // } else{
+        // i++;
+        // }
+        // cur = cur.next;
+        // }
+        // if(cur != null){
+        // p.next = cur;
+        // }
+        // return dummyHead.next;
+        if (head.next == null) {
+            return head;
+        }
+
+        ListNode next = null;
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        head = prev;
+        curr = head.next;
+
+        while (curr != null) {
+            if (curr.val < prev.val) {
+                curr = curr.next;
+            } else {
+                next = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = next;
+            }
+        }
+
+        head.next = null;
+        return prev;
+    }
+
+    // 241. Different Ways to Add Parentheses
+    public List<Integer> diffWaysToCompute(String expression) {
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < expression.length(); i++) {
+            char ch = expression.charAt(i);
+            if (ch == '+' || ch == '-' || ch == '*') {
+                List<Integer> s1 = diffWaysToCompute(expression.substring(0, i));
+                List<Integer> s2 = diffWaysToCompute(expression.substring(i + 1));
+                for (int a : s1) {
+                    for (int b : s2) {
+                        if (ch == '+')
+                            res.add(a + b);
+                        else if (ch == '-')
+                            res.add(a - b);
+                        else if (ch == '*')
+                            res.add(a * b);
+                    }
+                }
+            }
+        }
+        if (res.isEmpty())
+            res.add(Integer.parseInt(expression));
+        return res;
+    }
+
+    // 516. Longest Palindromic Subsequence
+    public int longestPalindromeSubseq(String s) {
+        int n = s.length();
+        String reverseS = new StringBuilder(s).reverse().toString();
+        int[] dp = new int[n + 1];
+        int[] de = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (s.charAt(i - 1) == reverseS.charAt(j - 1)) {
+                    dp[j] = de[j - 1] + 1;
+                } else {
+                    dp[j] = Math.max(dp[j - 1], de[j]);
+                }
+            }
+            de = Arrays.copyOf(dp, n + 1);
+        }
+        return de[n];
+    }
+
+    // 386. Lexicographical Numbers
+    public List<Integer> lexicalOrder(int n) {
+        List<Integer> res = new ArrayList<>();
+        int cur = 1;
+        for (int i = 0; i < n; i++) {
+            res.add(cur);
+            if (cur * 10 <= n) {
+                cur *= 10;
+            } else {
+                while (cur >= n || cur % 10 == 9) {
+                    cur /= 10;
+                }
+                cur++;
+            }
+        }
+        return res;
+    }
+
+    // 41. First Missing Positive
+    public int firstMissingPositive(int[] nums) {
+        int res = nums.length + 1;
+        int n = res - 1;
+        boolean[] visited = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0 && nums[i] <= n) {
+                visited[nums[i] - 1] = true;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                return i + 1;
+            }
+        }
+        return res;
+    }
+
+    // 268. Missing Number
+    public int missingNumber(int[] nums) {
+        int res = nums.length;
+        int n = res;
+        boolean[] visited = new boolean[n + 1];
+        for (int i = 0; i < n; i++) {
+            visited[nums[i]] = true;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                return i;
+            }
+        }
+        return res;
+    }
+
+    // 2707. Extra Characters in a String
+    public int minExtraChar(String s, String[] dictionary) {
+        Set<String> set = new HashSet<>();
+        for (String str : dictionary) {
+            set.add(str);
+        }
+        int[] dp = new int[s.length() + 1];
+        for (int i = 0; i < s.length(); i++) {
+            dp[i + 1] = s.length();
+        }
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                String sub = s.substring(j, i);
+                if (set.contains(sub)) {
+                    dp[i] = Math.min(dp[i], dp[j]);
+                }
+            }
+            dp[i] = Math.min(dp[i - 1] + 1, dp[i]);
+        }
+        return dp[s.length()];
+    }
+
+    // 139. Word Break
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        for (String str : wordDict) {
+            set.add(str);
+        }
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                String sub = s.substring(j, i);
+                if (dp[j] && set.contains(sub)) {
+                    dp[i] = dp[j];
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+
+    // 140. Word Break II
+    public List<String> wordBreak2(String s, List<String> wordDict) {
+        Set<String> set = new HashSet<>();
+        for (String str : wordDict) {
+            set.add(str);
+        }
+        List<String> res = new ArrayList<>();
+        wordBreakBfs(0, s, "", set, res);
+        return res;
+    }
+
+    void wordBreakBfs(int index, String s, String word, Set<String> set, List<String> res) {
+        if (s.length() == index) {
+            if (!word.isEmpty()) {
+                res.add(word);
+            }
+            return;
+        }
+        for (int i = index + 1; i <= s.length(); i++) {
+            String temp = s.substring(index, i);
+            if (set.contains(temp)) {
+                if (word.equals(""))
+                    wordBreakBfs(i, s, temp, set, res);
+                else {
+                    wordBreakBfs(i, s, word + " " + temp, set, res);
+                }
+            }
+        }
+    }
+
+    // 3043. Find the Length of the Longest Common Prefix
+    public int longestCommonPrefix(int[] arr1, int[] arr2) {
+        // int length1 = arr1.length;
+        // Set<String> set = new HashSet<>();
+        // for(int i = 0; i < length1; i++){
+        // String temp = Integer.toString(arr1[i]);
+        // for(int j = 0; j < temp.length(); j++){
+        // String sub = temp.substring(0, j);
+        // set.add(sub);
+        // }
+        // set.add(temp);
+        // }
+        // int length2 = arr2.length;
+        // int res= 0;
+        // for(int i = 0; i < length2; i++){
+        // String temp = Integer.toString(arr2[i]);
+        // if(set.contains(temp)){
+        // res = Math.max(res, temp.length());
+        // continue;
+        // }
+        // for(int j = temp.length()-1; j > 0; j--){
+        // String sub = temp.substring(0, j);
+        // if(set.contains(sub)){
+        // res = Math.max(res, j);
+        // break;
+        // }
+        // }
+        // }
+        // return res;
+        Trie root = new Trie(10);
+        for (int val : arr1) {
+            Trie curr = root;
+            for (char ch : String.valueOf(val).toCharArray()) {
+                if (curr.children[ch - '0'] == null) {
+                    curr.children[ch - '0'] = new Trie();
+                }
+                curr = curr.children[ch - '0'];
+            }
+        }
+
+        int currCount = 0;
+        int ans = 0;
+        for (int val : arr2) {
+            Trie curr = root;
+            for (char ch : String.valueOf(val).toCharArray()) {
+                if (curr.children[ch - '0'] == null) {
+                    break;
+                }
+                currCount++;
+                curr = curr.children[ch - '0'];
+            }
+            ans = Math.max(ans, currCount);
+            currCount = 0;
+        }
+        return ans;
+    }
+
+    // 1497. Check If Array Pairs Are Divisible by k
+    public boolean canArrange(int[] arr, int k) {
+        int len = arr.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < len; i++) {
+            arr[i] %= k;
+            if (arr[i] < 0)
+                arr[i] += k;
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+        for (int i : map.keySet()) {
+            if (i == 0) {
+                if (i % 2 == 1) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+            int iv = map.get(i);
+            int riv = map.getOrDefault(k - i, 0);
+            if (i == k - i) {
+                if (iv % 2 == 1) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+            if (iv != riv) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 1331. Rank Transform of an Array
+    public int[] arrayRankTransform(int[] arr) {
+        int[] newArr = arr.clone();
+        Arrays.sort(newArr);
+        int count = 1;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            while (i < arr.length - 1 && newArr[i] == newArr[i + 1]) {
+                i++;
+            }
+            if (i == arr.length - 1) {
+                map.put(newArr[i], count);
+            } else {
+                map.put(newArr[i], count);
+                count++;
+            }
+        }
+        int[] res = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            res[i] = map.get(arr[i]);
+        }
+        return res;
+    }
+
+    // 1590. Make Sum Divisible by P
+    public int minSubarray(int[] nums, int p) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int sum = 0;
+        // 计算整个数组模p的和
+        for (int i = 0; i < nums.length; i++) {
+            int temp = nums[i] % p;
+            nums[i] = temp;
+            sum += temp;
+            sum %= p;
+        }
+        System.out.println("数组对p取模之后的和: " + sum);
+        System.out.println("数组取模后的结果: " + Arrays.toString(nums));
+
+        // 如果sum为0，表示数组本身已经满足条件
+        if (sum == 0) {
+            return 0;
+        }
+
+        // 先将前缀和0对应的下标放入map
+        map.put(0, -1);
+
+        int presum = 0; // 前缀和
+        int res = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            presum += nums[i];
+            presum %= p;
+            // 保证target为正
+            int target = (presum - sum + p) % p; // 寻找目标值
+
+            System.out.println("当前下标: " + i + ", 前缀和: " + presum + ", 目标值: " + target);
+
+            if (map.containsKey(target)) {
+                res = Math.min(res, i - map.get(target));
+                System.out.println("找到符合条件的子数组，当前最小长度: " + res);
+            }
+            map.put(presum, i); // 更新哈希表
+            System.out.println("当前哈希表内容: " + map);
+        }
+
+        // 返回结果
+        return res == Integer.MAX_VALUE || res == nums.length ? -1 : res;
+    }
+
+    // 2491. Divide Players Into Teams of Equal Skill
+    public long dividePlayers(int[] skill) {
+        long len = skill.length;
+        long sum = 0;
+        for (int num : skill) {
+            sum += num;
+        }
+        long subsum = sum / (len / 2);
+        boolean flag = true;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : skill) {
+            if (num > subsum) {
+                return -1;
+            }
+            num %= subsum;
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        long res = 0;
+        List<Integer> visited = new ArrayList<>();
+        for (int key : map.keySet()) {
+            if (visited.contains(key)) {
+                continue;
+            }
+            int value = map.get(key);
+            if (key * 2 == subsum) {
+                if (value % 2 != 0) {
+                    flag = false;
+                    break;
+                } else {
+                    res += (long) value * (long) key * (long) key / 2;
+                    continue;
+                }
+            }
+            int left = (int) subsum - key;
+            if (map.getOrDefault(left, 0) == value) {
+                res += (long) value * (long) left * (long) key;
+                visited.add(left);
+            } else {
+                flag = false;
+                break;
+            }
+        }
+        if (!flag) {
+            return -1;
+        }
+        return res;
+    }
+
+    // 567. Permutation in String
+    public boolean checkInclusion(String s1, String s2) {
+        int l1 = s1.length(), l2 = s2.length();
+        int[] array1 = new int[26];
+        for (char ch : s1.toCharArray()) {
+            array1[ch - 'a']++;
+        }
+        int[] array2 = new int[26];
+        for (int i = 0; i < l2; i++) {
+            array2[s2.charAt(i) - 'a']++;
+            if (i >= l1) {
+                array2[s2.charAt(i - l1) - 'a']--;
+            }
+            if (Arrays.equals(array1, array2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 1813. Sentence Similarity III
+    public boolean areSentencesSimilar(String sentence1, String sentence2) {
+        String[] s1 = sentence1.split(" ");
+        String[] s2 = sentence2.split(" ");
+        if (s1.length < s2.length) {
+            String[] temp = s1;
+            s1 = s2;
+            s2 = temp;
+        }
+        int start = 0, end = 0;
+        int n1 = s1.length, n2 = s2.length;
+        while (start < n2 && s1[start].equals(s2[start])) {
+            start++;
+        }
+        while (end < n2 && s1[n1 - end - 1].equals(s2[n2 - end - 1])) {
+            end++;
+        }
+        return start + end >= n2;
+    }
+
+    // 2554. Maximum Number of Integers to Choose From a Range I
+    public int maxCount(int[] banned, int n, int maxSum) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int i : banned) {
+            set.add(i);
+        }
+        int sum = 0;
+        int count = 0;
+        for (int i = 1; i <= n; i++) {
+            if (!set.contains(i)) {
+                sum += i;
+                if (sum <= maxSum)
+                    count++;
+                else
+                    break;
+            }
+        }
+        return count;
+    }
+
+    // 2490. Circular Sentence
+    public boolean isCircularSentence(String sentence) {
+        String[] words = sentence.split(" ");
+        for (int i = 0; i < words.length; i++) {
+            String cur = words[i];
+            String next = words[1 + i == words.length ? 0 : i + 1];
+            if (cur.charAt(cur.length() - 1) != next.charAt(0)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 2696. Minimum String Length After Removing Substrings
+    public int minLength(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char cur = s.charAt(i);
+
+            if (stack.isEmpty()) {
+                stack.push(cur);
+                continue;
+            }
+
+            if (cur == 'B' && stack.peek() == 'A') {
+                stack.pop();
+            } else if (cur == 'D' && stack.peek() == 'C') {
+                stack.pop();
+            } else {
+                stack.push(cur);
+            }
+        }
+        return stack.size();
+    }
+
+    // 1963. Minimum Number of Swaps to Make the String Balanced
+    public int minSwaps(String s) {
+        int size = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (ch == '[')
+                size++;
+            else if (size > 0)
+                size--;
+        }
+        return (size + 1) / 2;
+    }
+
+    // 921. Minimum Add to Make Parentheses Valid
+    public int minAddToMakeValid(String s) {
+        int open = 0, close = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                open++;
+            } else {
+                if (open > 0)
+                    open--;
+                else
+                    close++;
+            }
+        }
+        return open + close;
+    }
+
+    // 962. Maximum Width Ramp
+    public int maxWidthRamp(int[] nums) {
+        int n = nums.length;
+        Stack<Integer> stack = new Stack<>();
+
+        // Step 1: Build a decreasing stack of indices
+        for (int i = 0; i < n; ++i) {
+            if (stack.isEmpty() || nums[stack.peek()] > nums[i]) {
+                stack.push(i);
+            }
+        }
+
+        int maxWidth = 0;
+
+        // Step 2: Traverse from the end and find maximum width ramp
+        for (int j = n - 1; j >= 0; --j) {
+            while (!stack.isEmpty() && nums[stack.peek()] <= nums[j]) {
+                maxWidth = Math.max(maxWidth, j - stack.pop());
+            }
+        }
+
+        return maxWidth;
+    }
+
+    // 1942. The Number of the Smallest Unoccupied Chair
+    public int smallestChair(int[][] times, int targetFriend) {
+        int[] targetT = times[targetFriend];
+        int n = times.length;
+        Arrays.sort(times, (a, b) -> {
+            return a[0] - b[0];
+        });
+        PriorityQueue<Integer> emptySeats = new PriorityQueue<>();
+        PriorityQueue<int[]> takenSeats = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        for (int i = 0; i < n; i++) {
+            emptySeats.add(i);
+        }
+        for (int[] time : times) {
+            int arrive = time[0];
+            int left = time[1];
+
+            // Free chairs that are vacated before the current arrival time
+            while (!takenSeats.isEmpty() && takenSeats.peek()[0] <= arrive) {
+                emptySeats.add(takenSeats.poll()[1]);
+            }
+
+            // Assign the smallest available chair
+            int chair = emptySeats.poll();
+
+            // If this is the target friend, return their chair number
+            if (arrive == targetT[0]) {
+                return chair;
+            }
+
+            // Mark the chair as being used until the friend's leave time
+            takenSeats.add(new int[] { left, chair });
+        }
+        return -1;
+    }
+
+    // 2406. Divide Intervals Into Minimum Number of Groups
+    public int minGroups(int[][] intervals) {
+        int[] starts=new int[intervals.length];
+        int[] ends=new int[intervals.length];
+        for (int i = 0; i < intervals.length; i++) {
+            starts[i] = intervals[i][0];
+            ends[i] = intervals[i][1];
+        }
+
+        // Sort start and end times
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+
+        int res = 0;
+        int end = 0;
+        for(int i=0;i<intervals.length;i++){
+            if(starts[i]>ends[end]){
+                end++;
+            }
+            else{
+                res++;
+            }
+        }
+        return res;
+    }
+
+    // 632. Smallest Range Covering Elements from K Lists
+    public int[] smallestRange(List<List<Integer>> nums) {
+        // Min-Heap: stores (value, list index, element index)
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        int curMax = Integer.MIN_VALUE;
+
+        // Initialize the heap with the first element of each list
+        for (int i = 0; i < nums.size(); i++) {
+            List<Integer> temp = nums.get(i);
+            minHeap.offer(new int[]{temp.get(0), i, 0});
+            curMax = Math.max(curMax, temp.get(0));
+        }
+
+        // Track the smallest range
+        int[] smallRange = new int[]{0, Integer.MAX_VALUE};
+
+        while (true) {
+            // Get the minimum element from the heap
+            int[] curr = minHeap.poll();
+            int curMin = curr[0], listIdx = curr[1], elemIdx = curr[2];
+
+            // Update the smallest range if a better one is found
+            if ((curMax - curMin < smallRange[1] - smallRange[0]) ||
+                (curMax - curMin == smallRange[1] - smallRange[0] && curMin < smallRange[0])) {
+                smallRange[0] = curMin;
+                smallRange[1] = curMax;
+            }
+
+            // Move to the next element in the same list
+            if (elemIdx < nums.get(listIdx).size() - 1) {
+                elemIdx++;
+                int nextVal = nums.get(listIdx).get(elemIdx);
+                minHeap.offer(new int[]{nextVal, listIdx, elemIdx});
+                curMax = Math.max(curMax, nextVal);
+            } else {
+                // If any list is exhausted, stop
+                break;
+            }
+        }
+        return smallRange;
+    }
+
+    // 2530. Maximal Score After Applying K Operations
+    public long maxKelements(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b)->b-a);
+        for(int num : nums){
+            pq.add(num);
+        }
+        long res = 0;
+        while(!pq.isEmpty() && k > 0){
+            int count = pq.poll();
+            res += count;
+            pq.add((int)Math.ceil(count/3.0));
+            k--;
+        }
+        return res;
+    }
+
+    // 2938. Separate Black and White Balls
+    public long minimumSteps(String s) {
+        char[] chs = s.toCharArray();
+        int n = chs.length;
+        long res=0;
+        int black = 0;
+        for(int i = 0; i < n; i++){
+            if(chs[i] == '1'){
+                black++;
+            }
+            else{
+                res += black;
+            }
+        }
+        return res;
     }
 }

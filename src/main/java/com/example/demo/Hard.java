@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -447,5 +448,98 @@ public class Hard {
             }
         }
         return st.peek() == 't';
+
+     // 87. Scramble String
+    Map<String, Boolean> isScrambleMap = new HashMap<>();
+
+    public boolean isScramble(String s1, String s2) {
+        int n = s1.length();
+        if (s1.equals(s2))
+            return true;
+        int[] a = new int[26], b = new int[26], c = new int[26];
+        if (isScrambleMap.containsKey(s1 + s2)) {
+            return isScrambleMap.get(s1 + s2);
+        }
+        for (int i = 1; i < n; i++) {
+            int j = n - i;
+            a[s1.charAt(i - 1) - 'a']++;
+            b[s2.charAt(i - 1) - 'a']++;
+            c[s2.charAt(j) - 'a']++;
+            // check if the current substring has the same characters
+            if (Arrays.equals(a, b) && isScramble(s1.substring(0, i), s2.substring(0, i))
+                    && isScramble(s1.substring(i), s2.substring(i))) {
+                // if the substrings are scrambled versions of each other, return true
+                isScrambleMap.put(s1 + s2, true);
+                return true;
+            }
+            if (Arrays.equals(a, c) && isScramble(s1.substring(0, i), s2.substring(j))
+                    && isScramble(s1.substring(i), s2.substring(0, j))) {
+                // if the substrings are scrambled versions of each other, return true
+                isScrambleMap.put(s1 + s2, true);
+                return true;
+            }
+        }
+        isScrambleMap.put(s1 + s2, false);
+        return false;
+    }
+
+    // 214. Shortest Palindrome
+    public String shortestPalindrome(String s) {
+        Utils utils = new Utils();
+        String reverse = new StringBuilder(s).reverse().toString();
+        int[] pi = utils.kmp(reverse, s);
+        return new StringBuilder(s.substring(pi[pi.length - 1])).reverse().toString() + s;
+    }
+
+    // 440. K-th Smallest in Lexicographical Order
+    // 前缀树处理
+    public int findKthNumber(int n, int k) {
+        long cur = 1;
+        int i = 1;
+        while (i < k) {
+            long steps = 0;
+            long first = cur;
+            long next = cur + 1;
+            while (first <= n) {
+                steps += Math.min(n + 1, next) - first;
+                first *= 10;
+                next *= 10;
+            }
+            if (steps + i <= k) {
+                cur++;
+                i += steps;
+            } else {
+                cur *= 10;
+                i++;
+            }
+        }
+        return (int) cur;
+    }
+
+    // 2416. Sum of Prefix Scores of Strings
+    public int[] sumPrefixScores(String[] words) {
+        int len = words.length;
+        int[] res = new int[len];
+        Trie trie = new Trie();
+        for (String word : words) {
+            Trie p = trie;
+            for (char ch : word.toCharArray()) {
+                if (p.children[ch - 'a'] == null) {
+                    p.children[ch - 'a'] = new Trie();
+                }
+                p.children[ch - 'a'].score++;
+                p = p.children[ch - 'a'];
+            }
+        }
+        for (int i = 0; i < len; i++) {
+            Trie p = trie;
+            int count = 0;
+            for (char ch : words[i].toCharArray()) {
+                count += p.children[ch - 'a'].score;
+                p = p.children[ch - 'a'];
+            }
+            res[i] = count;
+        }
+        return res;
     }
 }
