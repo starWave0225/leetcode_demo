@@ -1747,8 +1747,9 @@ public class Solution {
 
     // 61. Rotate List
     public ListNode rotateRight(ListNode head, int k) {
-        if (k == 0 || head == null || head.next == null)
+        if (k == 0 || head == null || head.next == null) {
             return head;
+        }
         ListNode p = head;
         int l = 0;
         while (p != null) {
@@ -1756,8 +1757,9 @@ public class Solution {
             p = p.next;
         }
         k %= l;
-        if (k == 0)
+        if (k == 0) {
             return head;
+        }
         ListNode p1 = new ListNode();
         p1.next = head;
         ListNode p2 = new ListNode();
@@ -1836,8 +1838,7 @@ public class Solution {
             }
             return '0';
         }
-
-      // 48. Rotate Image
+        // 48. Rotate Image
     public void rotate(int[][] matrix) {
         int n = matrix.length;
         int t = 0, b = n - 1;
@@ -1870,8 +1871,9 @@ public class Solution {
             }
             numsInt[i] = nums[i]; // Auto-boxing
         }
-        if (flag)
+        if (flag) {
             return "0";
+        }
         Arrays.sort(numsInt, (a, b) -> {
             String stra = a.toString();
             String strb = b.toString();
@@ -1961,18 +1963,20 @@ public class Solution {
                 List<Integer> s2 = diffWaysToCompute(expression.substring(i + 1));
                 for (int a : s1) {
                     for (int b : s2) {
-                        if (ch == '+')
+                        if (ch == '+') {
                             res.add(a + b);
-                        else if (ch == '-')
+                        } else if (ch == '-') {
                             res.add(a - b);
-                        else if (ch == '*')
+                        } else if (ch == '*') {
                             res.add(a * b);
+                        }
                     }
                 }
             }
         }
-        if (res.isEmpty())
+        if (res.isEmpty()) {
             res.add(Integer.parseInt(expression));
+        }
         return res;
     }
 
@@ -2109,9 +2113,9 @@ public class Solution {
         for (int i = index + 1; i <= s.length(); i++) {
             String temp = s.substring(index, i);
             if (set.contains(temp)) {
-                if (word.equals(""))
+                if (word.equals("")) {
                     wordBreakBfs(i, s, temp, set, res);
-                else {
+                } else {
                     wordBreakBfs(i, s, word + " " + temp, set, res);
                 }
             }
@@ -2181,8 +2185,9 @@ public class Solution {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < len; i++) {
             arr[i] %= k;
-            if (arr[i] < 0)
+            if (arr[i] < 0) {
                 arr[i] += k;
+            }
             map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
         }
         for (int i : map.keySet()) {
@@ -2376,10 +2381,11 @@ public class Solution {
         for (int i = 1; i <= n; i++) {
             if (!set.contains(i)) {
                 sum += i;
-                if (sum <= maxSum)
+                if (sum <= maxSum) {
                     count++;
-                else
+                } else {
                     break;
+                }
             }
         }
         return count;
@@ -2426,10 +2432,11 @@ public class Solution {
         int size = 0;
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if (ch == '[')
+            if (ch == '[') {
                 size++;
-            else if (size > 0)
+            } else if (size > 0) {
                 size--;
+            }
         }
         return (size + 1) / 2;
     }
@@ -2441,10 +2448,11 @@ public class Solution {
             if (c == '(') {
                 open++;
             } else {
-                if (open > 0)
+                if (open > 0) {
                     open--;
-                else
+                } else {
                     close++;
+                }
             }
         }
         return open + close;
@@ -2504,15 +2512,15 @@ public class Solution {
             }
 
             // Mark the chair as being used until the friend's leave time
-            takenSeats.add(new int[] { left, chair });
+            takenSeats.add(new int[]{left, chair});
         }
         return -1;
     }
 
     // 2406. Divide Intervals Into Minimum Number of Groups
     public int minGroups(int[][] intervals) {
-        int[] starts=new int[intervals.length];
-        int[] ends=new int[intervals.length];
+        int[] starts = new int[intervals.length];
+        int[] ends = new int[intervals.length];
         for (int i = 0; i < intervals.length; i++) {
             starts[i] = intervals[i][0];
             ends[i] = intervals[i][1];
@@ -2524,11 +2532,10 @@ public class Solution {
 
         int res = 0;
         int end = 0;
-        for(int i=0;i<intervals.length;i++){
-            if(starts[i]>ends[end]){
+        for (int i = 0; i < intervals.length; i++) {
+            if (starts[i] > ends[end]) {
                 end++;
-            }
-            else{
+            } else {
                 res++;
             }
         }
@@ -2557,8 +2564,8 @@ public class Solution {
             int curMin = curr[0], listIdx = curr[1], elemIdx = curr[2];
 
             // Update the smallest range if a better one is found
-            if ((curMax - curMin < smallRange[1] - smallRange[0]) ||
-                (curMax - curMin == smallRange[1] - smallRange[0] && curMin < smallRange[0])) {
+            if ((curMax - curMin < smallRange[1] - smallRange[0])
+                    || (curMax - curMin == smallRange[1] - smallRange[0] && curMin < smallRange[0])) {
                 smallRange[0] = curMin;
                 smallRange[1] = curMax;
             }
@@ -2579,15 +2586,15 @@ public class Solution {
 
     // 2530. Maximal Score After Applying K Operations
     public long maxKelements(int[] nums, int k) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b)->b-a);
-        for(int num : nums){
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        for (int num : nums) {
             pq.add(num);
         }
         long res = 0;
-        while(!pq.isEmpty() && k > 0){
+        while (!pq.isEmpty() && k > 0) {
             int count = pq.poll();
             res += count;
-            pq.add((int)Math.ceil(count/3.0));
+            pq.add((int) Math.ceil(count / 3.0));
             k--;
         }
         return res;
@@ -2597,16 +2604,70 @@ public class Solution {
     public long minimumSteps(String s) {
         char[] chs = s.toCharArray();
         int n = chs.length;
-        long res=0;
+        long res = 0;
         int black = 0;
-        for(int i = 0; i < n; i++){
-            if(chs[i] == '1'){
+        for (int i = 0; i < n; i++) {
+            if (chs[i] == '1') {
                 black++;
-            }
-            else{
+            } else {
                 res += black;
             }
         }
         return res;
+    }
+
+    // 2641. Cousins in Binary Tree II
+    public TreeNode replaceValueInTree(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<Integer> sumQueue = new ArrayList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+            int sum = 0;
+            while (len > 0) {
+                len--;
+                TreeNode cur = queue.poll();
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                    sum += cur.left.val;
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                    sum += cur.right.val;
+                }
+            }
+            sumQueue.add(sum);
+        }
+        queue.add(root);
+        int curLevel = 0;
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+            while (len > 0) {
+                len--;
+                TreeNode cur = queue.poll();
+                int temp = 0;
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                    temp += cur.left.val;
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                    temp += cur.right.val;
+                }
+                if (curLevel <= 1) {
+                    cur.val = 0;
+                }
+                if (curLevel >= 1) {
+                    if (cur.left != null) {
+                        cur.left.val = sumQueue.get(curLevel) - temp;
+                    }
+                    if (cur.right != null) {
+                        cur.right.val = sumQueue.get(curLevel) - temp;
+                    }
+                }
+            }
+            curLevel++;
+        }
+        return root;
     }
 }
