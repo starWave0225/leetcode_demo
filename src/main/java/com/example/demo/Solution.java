@@ -1838,7 +1838,9 @@ public class Solution {
             }
             return '0';
         }
-        // 48. Rotate Image
+    }
+    
+    // 48. Rotate Image
     public void rotate(int[][] matrix) {
         int n = matrix.length;
         int t = 0, b = n - 1;
