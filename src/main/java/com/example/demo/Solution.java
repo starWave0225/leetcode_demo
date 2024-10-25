@@ -2702,4 +2702,23 @@ public class Solution {
         }
         return res;
     }
+
+    // 1880. Check if Word Equals Summation of Two Words
+    public long isSumEqualHelper(String str) {
+        char[] chs = str.toCharArray();
+        long res = 0;
+        for (char ch : chs) {
+            long temp = ch - 'a';
+            res *= 10;
+            res += temp;
+        }
+        return res;
+    }
+
+    public boolean isSumEqual(String firstWord, String secondWord, String targetWord) {
+        long num1 = isSumEqualHelper(firstWord);
+        long num2 = isSumEqualHelper(secondWord);
+        long num3 = isSumEqualHelper(targetWord);
+        return num1 + num2 == num3;
+        }
 }
