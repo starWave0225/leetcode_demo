@@ -1839,7 +1839,7 @@ public class Solution {
             return '0';
         }
     }
-    
+
     // 48. Rotate Image
     public void rotate(int[][] matrix) {
         int n = matrix.length;
@@ -2682,11 +2682,24 @@ public class Solution {
         }
         if (root1.val != root2.val) {
             return false;
-        }
-        else if ((flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right))
+        } else if ((flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right))
                 || (flipEquiv(root1.left, root2.right) && flipEquiv(root1.right, root2.left))) {
             return true;
         }
         return false;
+    }
+
+    // 1233. Remove Sub-Folders from the Filesystem
+    public List<String> removeSubfolders(String[] folder) {
+        Arrays.sort(folder);
+        List<String> res = new ArrayList<>();
+        res.add(folder[0]);
+        for (int i = 1; i < folder.length; i++) {
+            if (folder[i].startsWith(res.get(res.size() - 1) + '/')) {
+                continue;
+            }
+            res.add(folder[i]);
+        }
+        return res;
     }
 }
