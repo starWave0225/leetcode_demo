@@ -2720,5 +2720,34 @@ public class Solution {
         long num2 = isSumEqualHelper(secondWord);
         long num3 = isSumEqualHelper(targetWord);
         return num1 + num2 == num3;
+    }
+
+    // 1930. Unique Length-3 Palindromic Subsequences
+    public int countPalindromicSubsequence(String s) {
+        char[] chs = s.toCharArray();
+        int len = chs.length;
+        boolean[] visited = new boolean[26];
+        int res = 0;
+        for (int i = 0; i < len; i++) {
+            if (visited[chs[i] - 'a']) {
+                continue;
+            }
+            visited[chs[i] - 'a'] = true;
+            Set<Character> set = new HashSet<>();
+            int last = i;
+
+            for (int j = i + 1; j < len; j++) {
+                if (chs[j] == chs[i]) {
+                    last = j;
+                }
+            }
+            if (last != i) {
+                for (int j = i + 1; j < last; j++) {
+                    set.add(chs[j]);
+                }
+                res += set.size();
+            }
         }
+        return res;
+    }
 }
