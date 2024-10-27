@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class Solution {
 
     Logger logger = Logger.getLogger(getClass().getName());
-    int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 
     public void log(String sth) {
         logger.info(sth);
@@ -288,7 +288,7 @@ public class Solution {
     // 1992. Find All Groups of Farmland
     private int[] findFarmlandDfs(int[][] land, Set<Integer> set, int i, int j) {
         Stack<int[]> stack = new Stack<>();
-        stack.push(new int[]{i, j});
+        stack.push(new int[] { i, j });
         set.add(i * 1000 + j);
         int minX = i, minY = j, maxX = i, maxY = j;
         while (!stack.isEmpty()) {
@@ -299,7 +299,7 @@ public class Solution {
                 if (nx >= 0 && nx < land.length && ny >= 0 && ny < land[0].length
                         && land[nx][ny] == 1 && !set.contains(nx * 1000 + ny)) {
                     set.add(nx * 1000 + ny);
-                    stack.push(new int[]{nx, ny});
+                    stack.push(new int[] { nx, ny });
                     minX = Math.min(minX, nx);
                     minY = Math.min(minY, ny);
                     maxX = Math.max(maxX, nx);
@@ -307,7 +307,7 @@ public class Solution {
                 }
             }
         }
-        return new int[]{minX, minY, maxX, maxY};
+        return new int[] { minX, minY, maxX, maxY };
     }
 
     public int[][] findFarmland(int[][] land) {
@@ -449,15 +449,15 @@ public class Solution {
     // 1391. Check if There is a Valid Path in a Grid
     public boolean hasValidPath(int[][] grid) {
         int[][][] dirs = {
-            {{0, -1}, {0, 1}},
-            {{-1, 0}, {1, 0}},
-            {{0, -1}, {1, 0}},
-            {{0, 1}, {1, 0}},
-            {{0, -1}, {-1, 0}},
-            {{0, 1}, {-1, 0}}
+                { { 0, -1 }, { 0, 1 } },
+                { { -1, 0 }, { 1, 0 } },
+                { { 0, -1 }, { 1, 0 } },
+                { { 0, 1 }, { 1, 0 } },
+                { { 0, -1 }, { -1, 0 } },
+                { { 0, 1 }, { -1, 0 } }
         };
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{0, 0});
+        queue.offer(new int[] { 0, 0 });
         int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
         visited[0][0] = true;
@@ -470,7 +470,7 @@ public class Solution {
                     for (int[] dir2 : dirs[grid[newi][newj] - 1]) {
                         if (newi + dir2[0] == i && newj + dir2[1] == j) {
                             visited[newi][newj] = true;
-                            queue.offer(new int[]{newi, newj});
+                            queue.offer(new int[] { newi, newj });
                         }
                     }
                 }
@@ -578,7 +578,7 @@ public class Solution {
 
     // 874. Walking Robot Simulation
     public int robotSim(int[] commands, int[][] obstacles) {
-        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
         int res = 0;
         int x = 0, y = 0, dir = 0;
         for (int command : commands) {
@@ -906,7 +906,7 @@ public class Solution {
         int newI = 0;
         int newJ = 0;
         int dir = 0;
-        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
         visited[0][0] = true;
         res[0][0] = cur.val;
         cur = cur.next;
@@ -1839,7 +1839,7 @@ public class Solution {
             return '0';
         }
     }
-    
+
     // 48. Rotate Image
     public void rotate(int[][] matrix) {
         int n = matrix.length;
@@ -2514,7 +2514,7 @@ public class Solution {
             }
 
             // Mark the chair as being used until the friend's leave time
-            takenSeats.add(new int[]{left, chair});
+            takenSeats.add(new int[] { left, chair });
         }
         return -1;
     }
@@ -2553,12 +2553,12 @@ public class Solution {
         // Initialize the heap with the first element of each list
         for (int i = 0; i < nums.size(); i++) {
             List<Integer> temp = nums.get(i);
-            minHeap.offer(new int[]{temp.get(0), i, 0});
+            minHeap.offer(new int[] { temp.get(0), i, 0 });
             curMax = Math.max(curMax, temp.get(0));
         }
 
         // Track the smallest range
-        int[] smallRange = new int[]{0, Integer.MAX_VALUE};
+        int[] smallRange = new int[] { 0, Integer.MAX_VALUE };
 
         while (true) {
             // Get the minimum element from the heap
@@ -2576,7 +2576,7 @@ public class Solution {
             if (elemIdx < nums.get(listIdx).size() - 1) {
                 elemIdx++;
                 int nextVal = nums.get(listIdx).get(elemIdx);
-                minHeap.offer(new int[]{nextVal, listIdx, elemIdx});
+                minHeap.offer(new int[] { nextVal, listIdx, elemIdx });
                 curMax = Math.max(curMax, nextVal);
             } else {
                 // If any list is exhausted, stop
@@ -2682,8 +2682,7 @@ public class Solution {
         }
         if (root1.val != root2.val) {
             return false;
-        }
-        else if ((flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right))
+        } else if ((flipEquiv(root1.left, root2.left) && flipEquiv(root1.right, root2.right))
                 || (flipEquiv(root1.left, root2.right) && flipEquiv(root1.right, root2.left))) {
             return true;
         }
@@ -2695,35 +2694,116 @@ public class Solution {
         int m = matrix.length;
         int n = matrix[0].length;
         int[][] dp = new int[m][n];
-        
+
         int ans = 0;
-        
+
         // Initialize first column of DP table
         for (int i = 0; i < m; i++) {
-            if(matrix[i][0] == 1){
+            if (matrix[i][0] == 1) {
                 dp[i][0] = 1;
                 ans++;
             }
         }
-        
+
         // Initialize first row of DP table
         for (int j = 1; j < n; j++) {
-            if(matrix[0][j] == 1){
+            if (matrix[0][j] == 1) {
                 dp[0][j] = 1;
                 ans++;
             }
         }
-        
+
         // Fill the DP table for remaining cells
-        for(int i = 1; i < m; i++) {
-            for(int j = 1; j < n; j++) {
-                if(matrix[i][j] == 1) {
-                    dp[i][j] = 1 + Math.min(Math.min(dp[i][j-1], dp[i-1][j]), dp[i-1][j-1]);
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 1) {
+                    dp[i][j] = 1 + Math.min(Math.min(dp[i][j - 1], dp[i - 1][j]), dp[i - 1][j - 1]);
                 }
                 ans += dp[i][j];
             }
         }
-        
+
         return ans;
+    }
+
+    // 1233. Remove Sub-Folders from the Filesystem
+    public List<String> removeSubfolders(String[] folder) {
+        Arrays.sort(folder);
+        List<String> res = new ArrayList<>();
+        res.add(folder[0]);
+        for (int i = 1; i < folder.length; i++) {
+            if (folder[i].startsWith(res.get(res.size() - 1) + '/')) {
+                continue;
+            }
+            res.add(folder[i]);
+        }
+        return res;
+    }
+
+    // 1880. Check if Word Equals Summation of Two Words
+    public long isSumEqualHelper(String str) {
+        char[] chs = str.toCharArray();
+        long res = 0;
+        for (char ch : chs) {
+            long temp = ch - 'a';
+            res *= 10;
+            res += temp;
+        }
+        return res;
+    }
+
+    public boolean isSumEqual(String firstWord, String secondWord, String targetWord) {
+        long num1 = isSumEqualHelper(firstWord);
+        long num2 = isSumEqualHelper(secondWord);
+        long num3 = isSumEqualHelper(targetWord);
+        return num1 + num2 == num3;
+    }
+
+    // 1930. Unique Length-3 Palindromic Subsequences
+    public int countPalindromicSubsequence(String s) {
+        char[] chs = s.toCharArray();
+        int len = chs.length;
+        boolean[] visited = new boolean[26];
+        int res = 0;
+        for (int i = 0; i < len; i++) {
+            if (visited[chs[i] - 'a']) {
+                continue;
+            }
+            visited[chs[i] - 'a'] = true;
+            Set<Character> set = new HashSet<>();
+            int last = i;
+
+            for (int j = i + 1; j < len; j++) {
+                if (chs[j] == chs[i]) {
+                    last = j;
+                }
+            }
+            if (last != i) {
+                for (int j = i + 1; j < last; j++) {
+                    set.add(chs[j]);
+                }
+                res += set.size();
+            }
+        }
+        return res;
+    }
+
+    // 2319. Check if Matrix Is X-Matrix
+    public boolean checkXMatrix(int[][] grid) {
+        int n = grid.length;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j || i == n - 1 - j) {
+                    if (grid[i][j] == 0) {
+                        return false;
+                    }
+                } else {
+                    if (grid[i][j] != 0) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }
