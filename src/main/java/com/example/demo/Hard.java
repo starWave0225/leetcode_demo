@@ -448,6 +448,7 @@ public class Hard {
             }
         }
         return st.peek() == 't';
+    }
 
      // 87. Scramble String
     Map<String, Boolean> isScrambleMap = new HashMap<>();

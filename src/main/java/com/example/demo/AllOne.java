@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import ch.qos.logback.core.joran.sanity.Pair;
-
 class AllOne {
     Map<String, Integer> map = new HashMap<>();
     TreeSet<Pair<Integer, String>> countSet = new TreeSet<>((a, b) -> a.getKey().equals(b.getKey()) ? a.getValue().compareTo(b.getValue()) : a.getKey() - b.getKey());
