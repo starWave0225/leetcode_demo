@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class Solution {
 
     Logger logger = Logger.getLogger(getClass().getName());
-    int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     public void log(String sth) {
         logger.info(sth);
@@ -288,7 +288,7 @@ public class Solution {
     // 1992. Find All Groups of Farmland
     private int[] findFarmlandDfs(int[][] land, Set<Integer> set, int i, int j) {
         Stack<int[]> stack = new Stack<>();
-        stack.push(new int[] { i, j });
+        stack.push(new int[]{i, j});
         set.add(i * 1000 + j);
         int minX = i, minY = j, maxX = i, maxY = j;
         while (!stack.isEmpty()) {
@@ -299,7 +299,7 @@ public class Solution {
                 if (nx >= 0 && nx < land.length && ny >= 0 && ny < land[0].length
                         && land[nx][ny] == 1 && !set.contains(nx * 1000 + ny)) {
                     set.add(nx * 1000 + ny);
-                    stack.push(new int[] { nx, ny });
+                    stack.push(new int[]{nx, ny});
                     minX = Math.min(minX, nx);
                     minY = Math.min(minY, ny);
                     maxX = Math.max(maxX, nx);
@@ -307,7 +307,7 @@ public class Solution {
                 }
             }
         }
-        return new int[] { minX, minY, maxX, maxY };
+        return new int[]{minX, minY, maxX, maxY};
     }
 
     public int[][] findFarmland(int[][] land) {
@@ -449,15 +449,15 @@ public class Solution {
     // 1391. Check if There is a Valid Path in a Grid
     public boolean hasValidPath(int[][] grid) {
         int[][][] dirs = {
-                { { 0, -1 }, { 0, 1 } },
-                { { -1, 0 }, { 1, 0 } },
-                { { 0, -1 }, { 1, 0 } },
-                { { 0, 1 }, { 1, 0 } },
-                { { 0, -1 }, { -1, 0 } },
-                { { 0, 1 }, { -1, 0 } }
+            {{0, -1}, {0, 1}},
+            {{-1, 0}, {1, 0}},
+            {{0, -1}, {1, 0}},
+            {{0, 1}, {1, 0}},
+            {{0, -1}, {-1, 0}},
+            {{0, 1}, {-1, 0}}
         };
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[] { 0, 0 });
+        queue.offer(new int[]{0, 0});
         int m = grid.length, n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
         visited[0][0] = true;
@@ -470,7 +470,7 @@ public class Solution {
                     for (int[] dir2 : dirs[grid[newi][newj] - 1]) {
                         if (newi + dir2[0] == i && newj + dir2[1] == j) {
                             visited[newi][newj] = true;
-                            queue.offer(new int[] { newi, newj });
+                            queue.offer(new int[]{newi, newj});
                         }
                     }
                 }
@@ -578,7 +578,7 @@ public class Solution {
 
     // 874. Walking Robot Simulation
     public int robotSim(int[] commands, int[][] obstacles) {
-        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
         int res = 0;
         int x = 0, y = 0, dir = 0;
         for (int command : commands) {
@@ -906,7 +906,7 @@ public class Solution {
         int newI = 0;
         int newJ = 0;
         int dir = 0;
-        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
         visited[0][0] = true;
         res[0][0] = cur.val;
         cur = cur.next;
@@ -2514,7 +2514,7 @@ public class Solution {
             }
 
             // Mark the chair as being used until the friend's leave time
-            takenSeats.add(new int[] { left, chair });
+            takenSeats.add(new int[]{left, chair});
         }
         return -1;
     }
@@ -2553,12 +2553,12 @@ public class Solution {
         // Initialize the heap with the first element of each list
         for (int i = 0; i < nums.size(); i++) {
             List<Integer> temp = nums.get(i);
-            minHeap.offer(new int[] { temp.get(0), i, 0 });
+            minHeap.offer(new int[]{temp.get(0), i, 0});
             curMax = Math.max(curMax, temp.get(0));
         }
 
         // Track the smallest range
-        int[] smallRange = new int[] { 0, Integer.MAX_VALUE };
+        int[] smallRange = new int[]{0, Integer.MAX_VALUE};
 
         while (true) {
             // Get the minimum element from the heap
@@ -2576,7 +2576,7 @@ public class Solution {
             if (elemIdx < nums.get(listIdx).size() - 1) {
                 elemIdx++;
                 int nextVal = nums.get(listIdx).get(elemIdx);
-                minHeap.offer(new int[] { nextVal, listIdx, elemIdx });
+                minHeap.offer(new int[]{nextVal, listIdx, elemIdx});
                 curMax = Math.max(curMax, nextVal);
             } else {
                 // If any list is exhausted, stop
@@ -2805,5 +2805,22 @@ public class Solution {
             }
         }
         return true;
+    }
+
+    // 2501. Longest Square Streak in an Array
+    public int longestSquareStreak(int[] nums) {
+        int res = -1;
+        Arrays.sort(nums);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int sub = (int) Math.sqrt(nums[i]);
+            if (sub * sub == nums[i] && map.containsKey(sub)) {
+                map.put(nums[i], map.get(sub) + 1);
+                res = Math.max(res, map.get(nums[i]));
+            } else {
+                map.put(nums[i], 1);
+            }
+        }
+        return res;
     }
 }
