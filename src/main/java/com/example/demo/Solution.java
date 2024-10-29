@@ -2823,4 +2823,55 @@ public class Solution {
         }
         return res;
     }
+
+    // 2684. Maximum Number of Moves in a Grid
+    boolean maxMovesHelper(int[][] grid, int i, int j, List<Integer> list) {
+        if (list.contains(i - 1)) {
+            int temp = grid[i - 1][j - 1];
+            if (temp < grid[i][j]) {
+                return true;
+            }
+        }
+        if (list.contains(i + 1)) {
+            int temp = grid[i + 1][j - 1];
+            if (temp < grid[i][j]) {
+                return true;
+            }
+        }
+        if (list.contains(i)) {
+            int temp = grid[i][j - 1];
+            return temp < grid[i][j];
+        }
+        return false;
+    }
+
+    public int maxMoves(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        List<List<Integer>> list = new ArrayList<>();
+        List<Integer> zero = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            zero.add(i);
+        }
+        list.add(zero);
+        for (int j = 1; j < n; j++) {
+            List<Integer> newList = new ArrayList<>();
+            for (int i = 0; i < m; i++) {
+                if (!list.get(j - 1).isEmpty()) {
+                    List temp = list.get(j - 1);
+                    boolean flag = maxMovesHelper(grid, i, j, temp);
+                    if (flag) {
+                        newList.add(i);
+                    }
+                } else {
+                    break;
+                }
+            }
+            if (newList.isEmpty()) {
+                return j == 1 ? 0 : j - 1;
+            }
+            list.add(newList);
+        }
+        return n - 1;
+    }
 }
