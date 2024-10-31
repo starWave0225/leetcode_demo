@@ -1,8 +1,10 @@
 package com.example.demo;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,9 +14,6 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
-import java.util.concurrent.PriorityBlockingQueue;
-
-import javax.print.DocFlavor.STRING;
 
 public class Hard {
 
@@ -542,5 +541,43 @@ public class Hard {
             res[i] = count;
         }
         return res;
+    }
+
+    
+    // 2463. Minimum Total Distance Traveled
+    public long minimumTotalDistance(List<Integer> robot, int[][] factory) {
+        int m = robot.size();
+        int n = factory.length;
+        Collections.sort(robot);
+        Arrays.sort(factory, (a, b) -> Integer.compare(a[0], b[0]));
+        // dp[i][j]就是i之后的机器人使用j之后的工厂的距离最小和
+        long[][] dp = new long[m + 1][n + 1];
+        for (int i = 0; i < m; i++) {
+            dp[i][n] = Long.MAX_VALUE;
+        }
+        for (int j = n - 1; j >= 0; j--) {
+            Deque<Pair<Integer, Long>> queue = new ArrayDeque<>();
+            queue.offer(new Pair<>(m, (long) 0));
+            long temp = 0;
+            // 从右往左遍历
+            for (int i = m - 1; i >= 0; i--) {
+                temp += Math.abs(robot.get(i) - factory[j][0]);
+
+                // 超过了,弹出
+                while (!queue.isEmpty() && factory[j][1] < queue.peekFirst().getKey() - i) {
+                    queue.pollFirst();
+                }
+
+                // 移除较大的记录
+                while (!queue.isEmpty() &&  queue.peekLast().getValue() >= dp[i][j + 1] - temp) {
+                    queue.pollLast();
+                }
+
+                queue.offerLast(new Pair<>(i, dp[i][j + 1] - temp));
+                dp[i][j] = queue.peekFirst().getValue() + temp;
+            }
+        }
+
+        return dp[0][0];
     }
 }
