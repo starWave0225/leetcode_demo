@@ -2918,4 +2918,34 @@ public class Solution {
         }
         return (s + s).contains(goal);
     }
+
+    // 3163. String Compression III
+    public String compressedString(String word) {
+        int len = word.length();
+        StringBuilder sb = new StringBuilder();
+        char pre = word.charAt(0);
+        int temp = 1;
+        for (int i = 1; i < len; i++) {
+            char cur = word.charAt(i);
+            if (cur == pre) {
+                if (temp == 9) {
+                    sb.append(temp);
+                    sb.append(cur);
+                    temp = 1;
+                } else {
+                    temp++;
+                }
+            } else {
+                sb.append(temp);
+                sb.append(pre);
+                pre = cur;
+                temp = 1;
+            }
+        }
+
+        sb.append(temp);
+        sb.append(pre);
+
+        return sb.toString();
+    }
 }
