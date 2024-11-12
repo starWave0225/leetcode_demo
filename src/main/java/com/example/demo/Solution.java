@@ -2952,10 +2952,79 @@ public class Solution {
     // 2914. Minimum Number of Changes to Make Binary String Beautiful
     public int minChanges(String s) {
         int res = 0;
-        for(int i = 0; i < s.length(); i++){
-            if(s.charAt(i) != s.charAt(++i)){
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != s.charAt(++i)) {
                 res++;
             }
+        }
+        return res;
+    }
+
+    // 2275. Largest Combination With Bitwise AND Greater Than Zero
+    public int largestCombination(int[] candidates) {
+        int ans = 0;
+        for (int i = 0; i < 32; i++) {
+            int cnt = 0;
+            for (int candidate : candidates) {
+                if ((candidate & (1 << i)) != 0)
+                    cnt++;
+            }
+            ans = Math.max(ans, cnt);
+        }
+        return ans;
+    }
+
+    // 3011. Find if Array Can Be Sorted
+    public boolean canSortArray(int[] nums) {
+        int pmax = 0, cmin = 0, cmax = 0;
+        int precnt = 0;
+        for (int v : nums) {
+            int ccnt = Integer.bitCount(v);
+            if (precnt == ccnt) {
+                cmin = Math.min(cmin, v);
+                cmax = Math.max(cmax, v);
+            } else if (cmin < pmax) {
+                return false;
+            } else {
+                pmax = cmax;
+                cmin = cmax = v;
+                precnt = ccnt;
+            }
+        }
+        return cmin >= pmax;
+    }
+
+    // 2070. Most Beautiful Item for Each Query
+    public int[] maximumBeauty(int[][] items, int[] queries) {
+        int len = queries.length;
+        int[] res = new int[len];
+        Arrays.sort(items, (a, b) -> {
+            if (a[0] != b[0]) {
+                return a[0] - b[0];
+            }
+            return a[1] - b[1];
+        });
+        int curMax = 0;
+        for (int i = 0; i < items.length; i++) {
+            curMax = Math.max(curMax, items[i][1]);
+            items[i][1] = curMax;
+        }
+        for (int i = 0; i < len; i++) {
+            int x = queries[i];
+            int left = 0, right = items.length - 1;
+
+            // Binary search for the largest price <= query
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                if (items[mid][0] <= x) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+
+            // If right < 0, there's no valid item for the query
+            res[i] = (right >= 0) ? items[right][1] : 0;
         }
         return res;
     }
